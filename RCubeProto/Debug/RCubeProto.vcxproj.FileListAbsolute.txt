@@ -1,0 +1,2 @@
+C:\Users\Default.RMC-CIS-L106D4B\source\repos\RCubeProto\Debug\RCubeProto.exe
+C:\Users\Default.RMC-CIS-L106D4B\source\repos\RCubeProto\Debug\RCubeProto.pdb
