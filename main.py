@@ -7,6 +7,6 @@ def test():
 def connorsTest():
     print("This is Connor's test function")
 
-if __name__ = '__main__':
+if __name__ == '__main__':
     print("This is a test script.")
     func()
