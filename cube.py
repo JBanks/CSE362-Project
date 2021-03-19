@@ -15,7 +15,7 @@ class Cube:
     def notify(self):
         pass
 
-    def get_state(self)
+    def get_state(self):
         pass
 
     def undo(self):
