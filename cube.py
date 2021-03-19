@@ -1,10 +1,14 @@
+import math
+
+import math
+
 class Cube:
 
     def __init__(self):
-        self.faces = []  # change this to reflect the data structure
+        self.faces = []  # 6x9 array
         self.moves = 0
-        self.phi = 0  # not sure if these values for phi and theta are correct
-        self.theta = 0
+        self.phi = math.pi/8  # start at pi/8
+        self.theta = math.pi/8
         self.active_face = 0
 
     def move(self, face, direction):
