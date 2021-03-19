@@ -2,9 +2,20 @@
 
 class Game:
     def keypress(self, key):
+        """
+
+        :param key:
+        :return:
+        """
         pass
 
     def click(self, x, y):
+        """
+        This will take a click from the user and pass it to the appropriate handler.
+        :param x: the x coordinate where the user has clicked
+        :param y: the y coordinate where the user has clicked
+        :return:
+        """
         pass
 
     def drag(self, start_x, start_y, x, y):
