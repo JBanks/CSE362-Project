@@ -4,31 +4,37 @@ class RecordKeeper:
         self.is_high_score = False
         self.best_times = []
         self.best_moves = []
-        self.high_scores_list = []
 
     def get_best_times(self):
         """
         This will return a list of all the times stored in the best_times list
         :return: List<float> best_times
         """
-        pass
+
+        return self.best_times
 
     def get_best_moves(self):
         """
         This will return a list of all the moves stored in the best_moves list
         :return: List<int> best_moves
         """
-        pass
+        return self.best_moves
 
     def check_high_score(self, moves, time):
         """
-        This will return true if the current score is a greater than all others
-        in high_scores_list, or false otherwise
+        This will return True if the current moves is less than any other in
+        best_moves, or if the current time is less than any other in best_times,
+        or will return False otherwise
         :param moves: int, the number of moves made by the player in the current game
         :param time: float, the time in seconds that elapsed in the current game
         :return: bool is_high_score
         """
-        pass
+       # if game.total_time < self.best_times[0]:
+       #     self.is_high_score = True
+       #     self.best_times.append(game.total_time)
+        # need to sort the list
+       # elif game.
+
 
     def post_high_score(self, moves, time):
         """
