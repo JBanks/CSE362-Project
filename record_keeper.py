@@ -24,6 +24,8 @@ class RecordKeeper:
         """
         This will return true if the current score is a greater than all others
         in high_scores_list, or false otherwise
+        :param moves: int, the number of moves made by the player in the current game
+        :param time: float, the time in seconds that elapsed in the current game
         :return: bool is_high_score
         """
         pass
@@ -31,6 +33,8 @@ class RecordKeeper:
     def post_high_score(self, moves, time):
         """
         This will enter the current score into high_scores_list
+        :param moves: int, the number of moves made by the player in the current game
+        :param time: float, the time in seconds that elapsed in the current game
         :return: void
         """
         pass
