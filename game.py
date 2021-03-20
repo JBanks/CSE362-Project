@@ -1,6 +1,7 @@
 import tkinter as tk
 from cube import Cube
 from solution_provider import SolutionProvider
+from record_keeper import RecordKeeper
 from constants import *
 
 
@@ -14,9 +15,9 @@ class GameController:
         self.view = view
         self.cube = cube
         self.solution_provider = SolutionProvider(self.cube)
+        self.record_keeper = RecordKeeper()
         self.dimensions = 3
         self.control_state = ControlStates.WHOLE
-        pass
 
     def update_ui(self):
         self.view.show_start_screen()
@@ -30,7 +31,24 @@ class GameController:
         :param key:
         :return:
         """
-        print(f"keypress({key})")
+        # TODO: Make sure these function calls are correct.
+        translate = {'z': 1, 'x': 2, 'c': 3, 'a': 4, 's': 5, 'd': 6, 'q': 7, 'w': 8, 'e': 9}
+        arrows = {37: (0, -45), 38: (1, 45), 39: (0, 45), 40: (1, 45)}
+        try:
+            key_val = int(key.char)
+        except:
+            try:
+                key_val = translate[key.char]
+            except:
+                self.cube.update_angle(*arrows[key.keycode])
+                print(f"invalid keypress: {key}")
+                return
+        if (key_val - 1) % 2 == 0:
+            self.control_state_update(key_val)
+        elif self.control_state == ControlStates.WHOLE:
+            self.cube.update_angle(*self.get_rotation(key_val))
+        else:
+            self.cube.move(*self.get_movement(key_val))
 
     def click(self, x, y):
         """
@@ -68,7 +86,6 @@ class GameController:
         :param key: The key that was pressed.
         :return: The face and direction of the move to be made.
         """
-
         # TODO: Determine which faces are in the positions specified
         active = Faces.GREEN
         top = Faces.YELLOW
@@ -94,6 +111,7 @@ class GameController:
                                                   6: (bottom, Direction.CW),
                                                   2: (right, Direction.CCW),
                                                   8: (right, Direction.CW)}}
+        print(f"sending movement control: {movements[self.control_state][key]}")
         return movements[self.control_state][key]
 
     def get_rotation(self, key):
@@ -102,7 +120,8 @@ class GameController:
         :param key: the key that was pressed
         :return: The axis and theta
         """
-        print(f"get_rotation({key})")
+        rotation = {4: (0, -45), 8: (1, 45), 6: (0, 45), 2: (1, 45)}
+        return rotation[key]
 
     def control_state_update(self, key):
         """
@@ -116,10 +135,12 @@ class GameController:
                           5: ControlStates.CENTER,
                           7: ControlStates.TOP_LEFT,
                           9: ControlStates.TOP_RIGHT}
+        old_control_state = self.control_state
         if self.control_state == control_states[key]:
             self.control_state = ControlStates.WHOLE
         else:
             self.control_state = control_states[key]
+        print(f"Updating control_state from {old_control_state} to {self.control_state}")
 
     def reset(self):
         """
@@ -203,6 +224,7 @@ class GameView(tk.Frame):
         self.canvas.update()
         self.cube = cube
         self.controller = GameController(self, cube)
+        master.bind("<KeyPress>", self.controller.keypress)
         self.controller.update_ui()
 
     def show_start_screen(self):
@@ -230,8 +252,17 @@ class GameView(tk.Frame):
         right = (WINDOW_HEIGHT + width) / 2
         submenu = self.canvas.create_rectangle(left, top, right, bottom, SUBMENU_STYLE)
         self.submenu_items.append(submenu)
-        x = left + BUTTON_MARGIN[0]
-        y = top + 200
+        best_moves = "Best Moves:\n18\n40\n15"
+        for score in self.controller.record_keeper.get_best_moves():
+            best_moves += f"\n{score}"
+        best_times = "Best Times:\n4 minutes\n8 minutes\n19 minutes"
+        for score in self.controller.record_keeper.get_best_times():
+            best_times += f"\n{score} + seconds"
+        label = self.canvas.create_text(left + 20, top + 20, text=best_moves, anchor="nw")
+        self.submenu_items.append(label)
+        label = self.canvas.create_text(right - 20, top + 20, text=best_times, anchor="ne")
+        self.submenu_items.append(label)
+
         clear_button = self.create_button('Clear Chart', lambda event: self.controller.clear_scores(), location=(
             left + (width - BUTTON_SIZE[0]) / 2,
             top + (height - 2 * BUTTON_SIZE[1] - 3 * BUTTON_MARGIN[1]))
@@ -258,7 +289,7 @@ class GameView(tk.Frame):
         x = left + BUTTON_MARGIN[0]
         y = top + 200
         for i in [2, 3, 4]:
-            size_button = self.create_button(f'{i}x{i}', lambda event, dim=i: self.controller.set_cube(dim),
+            size_button = self.create_button(f'{i}x{i}x{i}', lambda event, dim=i: self.controller.set_cube(dim),
                                              location=(x, y))
             y += BUTTON_SIZE[1] + 2 * BUTTON_MARGIN[1]
             for widget in size_button:
@@ -280,7 +311,13 @@ class GameView(tk.Frame):
                                      WINDOW_HEIGHT - BUTTON_SIZE[1] - BUTTON_MARGIN[1]))
 
     def show_finished_screen(self):
-        print("show_finished_screen()")
+        self.canvas.delete(tk.ALL)
+        y = WINDOW_HEIGHT - 2 * BUTTON_SIZE[1] - 7 * BUTTON_MARGIN[1]
+        self.create_button('High Scores', lambda event: self.show_high_scores(),
+                           location=((WINDOW_WIDTH - BUTTON_SIZE[0]) / 2, y))
+        y += BUTTON_SIZE[1] + 2 * BUTTON_MARGIN[1]
+        self.create_button('Main Screen', lambda event: self.show_start_screen(),
+                           location=((WINDOW_WIDTH - BUTTON_SIZE[0]) / 2, y))
 
     def clear_submenu(self):
         for submenu_item in self.submenu_items:
