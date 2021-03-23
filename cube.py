@@ -13,15 +13,9 @@ class Cube:
         self.theta = math.pi/8
         self.active_face = 0
         self.cube_size = 2
+        self.n = 2 #pocket cube TODO change the initialization of n so the user choses
+        self.gap = 0.2
 
-        pygame.init()
-        display = (800, 600)
-        pygame.display.set_mode(display, DOUBLEBUF | OPENGL)
-
-        gluPerspective(45, (display[0] / display[1]), 0.1, 50.0)
-
-        glTranslatef(-1.5, -2.0, -10)
-        glEnable(GL_DEPTH_TEST)
 
     def move(self, face, direction):
         """
@@ -85,14 +79,13 @@ class Cube:
         """
         pass
 
-    def set_cube(self, n):
+    def set_cube(self,x,y,z):
         """
         this method is going to set the cube to be displayed
-        :param n : the dimension of the cube.
         :return: void
         """
         glPushMatrix()
-
+        glTranslatef((x - 1) * self.cube_size + x * self.gap, (y - 1) * self.cube_size + y * self.gap, (z - 1) * self.cube_size + z * self.gap)
         # front face : red
         glColor(1,0,0)
         glBegin(GL_QUADS)
@@ -149,14 +142,3 @@ class Cube:
         glPopMatrix()
 
 
-cube = Cube()
-
-while True:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            quit()
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-        cube.set_cube(1)
-        pygame.display.flip()
-        # pygame.time.wait()
