@@ -1,3 +1,14 @@
+from constants import *
+
+
+class Node:
+    def __init__(self, state):
+        self.parent = None
+        self.steps = None
+        self.hash = None
+
+    def __eq__(self, other_node):
+        return self.hash == other_node.hash
 
 
 class SolutionProvider:
@@ -10,6 +21,11 @@ class SolutionProvider:
         self.observers = []
         self.moves = []
         self.moves_taken = 0
+
+        self.actions = []
+        for face in Faces:
+            for direction in Direction:
+                self.actions.append((face, direction))
 
     def add_observer(self, observer):
         """
@@ -41,7 +57,28 @@ class SolutionProvider:
         :return: sequence of moves that are to be made on the cube
         """
         # TODO: Complete the get_optimum function
-        pass
+        start_node = Node(self.cube)
+        end_node = Node(finished_state)
+        start_frontier = [start_node]
+        end_frontier = [end_node]
+        start_explored = []
+        end_explored = []
+        while start_frontier or end_frontier:
+            current_start = start_frontier.pop()
+            current_end = end_frontier.pop()
+            for action in self.actions:
+                new_from_start = simulate_move(current_start, action)
+                if new_from_start in end_explored:
+                    other_side = end_explored.find(new_from_start)
+                    return path(new_from_start, other_side)
+                elif new_from_start not in start_explored and new_from_start not in start_frontier:
+                    start_frontier.push(new_from_start)
+                new_from_end = simulate_move(current_end, action)
+                if new_from_end in start_explored:
+                    other_side = start_explored.find(new_from_end)
+                    return path(other_side, new_from_end)
+                elif new_from_end not in end_explored and new_from_end not in end_frontier:
+                    end_frontier.push(new_from_end)
 
     def notify(self):
         """
