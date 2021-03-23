@@ -85,7 +85,7 @@ class Cube:
         :return: void
         """
         glPushMatrix()
-        # glTranslatef((x - 1) * self.cube_size + x * self.gap, (y - 1) * self.cube_size + y * self.gap, (z - 1) * self.cube_size + z * self.gap)
+        glTranslatef((x - 1) * self.cube_size + x * self.gap, (y - 1) * self.cube_size + y * self.gap, (z - 1) * self.cube_size + z * self.gap)
         # front face : red
         glColor(1,0,0)
         glBegin(GL_QUADS)
