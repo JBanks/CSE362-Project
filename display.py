@@ -3,6 +3,7 @@ from pygame.locals import *
 import math
 from OpenGL.GL import *
 from OpenGL.GLU import *
+from OpenGL.GLUT import *
 import cube
 
 class Display:
@@ -12,11 +13,12 @@ class Display:
         self.k_down = False #TODO maybe remove this one...
         self.cube = cube.Cube()
         pygame.init()
-        display = (800, 600)
-        pygame.display.set_mode(display, DOUBLEBUF | OPENGL)
+        self.w = 800
+        self.h = 600
+        pygame.display.set_mode((self.w, self.h), DOUBLEBUF | OPENGL)
+        glutInitDisplayMode( GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH)
 
-        gluPerspective(45, (display[0] / display[1]), 0.1, 50.0)
-
+        gluPerspective(45, (self.w / self.h), 0.1, 50.0)
         # glTranslatef(-1.5, -2.0, -10)
         glEnable(GL_DEPTH_TEST)
 
@@ -28,18 +30,19 @@ class Display:
                 :param   :
                 :return: void
                 """
-        # glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         glMatrixMode(GL_MODELVIEW)
-        print("yo")
-        # glLoadIdentity()
+        glLoadIdentity()
         #gluLookAt(10, 3, 0, 0, 0, 0, 0, 1, 0)
         glTranslatef(0.0, 0.0, -25.0 )
         for i in range(2):
             for j in range(2):
                 for k in range(2):
                     self.cube.set_cube(i,j,k)
+                    # pygame.display.flip()
+        # self.cube.set_cube(1,1,1)
         glFlush()
+        glutSwapBuffers()
 
     def update_move(self, move):
         """
@@ -57,6 +60,13 @@ class Display:
                 :return: void
                 """
         pass
+    def redisplay(self):
+        glViewport(0, 0, self.w, self.h)
+        glMatrixMode(GL_PROJECTION)
+        glLoadIdentity()
+        gluPerspective(45.0, self.w/self.h,1.0,1000.0)
+        glMatrixMode(GL_MODELVIEW)
+        glLoadIdentity()
 
 disp = Display()
 while True:
@@ -64,8 +74,12 @@ while True:
         if event.type == pygame.QUIT:
             pygame.quit()
             quit()
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
-        disp.display()
 
-        pygame.time.wait(5000)
+        glMatrixMode(GL_MODELVIEW)
+        # glLoadIdentity()
+        glutReshapeFunc(disp.redisplay())
+        glutDialsFunc(disp.display())
         pygame.display.flip()
+
+        print("ok")
+        pygame.time.wait(500)
