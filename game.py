@@ -93,8 +93,10 @@ class GameController:
         right = Faces.ORANGE
         bottom = Faces.WHITE
 
-        movements = {ControlStates.CENTER: {4: (active, Direction.CW),
-                                            6: (active, Direction.CCW)},
+        movements = {ControlStates.CENTER: {4: (active, Direction.CCW),
+                                            6: (active, Direction.CW),
+                                            2: (active, Direction.CW),
+                                            8: (active, Direction.CCW)},
                      ControlStates.TOP_LEFT: {4: (top, Direction.CW),
                                               6: (top, Direction.CCW),
                                               2: (left, Direction.CW),

@@ -6,9 +6,35 @@ class Node:
         self.parent = None
         self.steps = None
         self.hash = None
+        self.state = state.copy()
+        self.calculate_hash()
 
     def __eq__(self, other_node):
+        """
+        Overloads the == operator to compare if two nodes have equal states by using the hashes.
+        :param other_node: A node that represents a rubik's cube
+        :return: boolean representing hash equality
+        """
         return self.hash == other_node.hash
+
+    def calculate_hash(self):
+        """
+        Calculates a hash of 3 integers to represent the state of the cube.  The hash is reversible, so we could remove
+        the state storage if memory space becomes an issue.
+
+        Each tile can be represented in 3 bits (values 0 through 6).  There are 9 tiles per face, for a total of 9*3=27
+        bits. 2 faces totals 54 bits per integer.  Each cube can then be represented by 3 integers
+        :return: list of 3 integers
+        """
+        self.hash = []
+        hash_val = 0
+        for face in Faces:
+            for tile, i in enumerate(self.state.faces):
+                hash_val += tile << 3 * i
+            if face % 2 == 1:
+                self.hash.append(hash_val)
+                hash_val = 0
+        return self.hash
 
 
 class SolutionProvider:
