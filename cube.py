@@ -1,5 +1,7 @@
-import math
-
+import pygame
+from pygame.locals import *
+from OpenGL.GL import *
+from OpenGL.GLU import *
 import math
 
 class Cube:
@@ -10,6 +12,10 @@ class Cube:
         self.phi = math.pi/8  # start at pi/8
         self.theta = math.pi/8
         self.active_face = 0
+        self.cube_size = 2
+        self.n = 2 #pocket cube TODO change the initialization of n so the user choses
+        self.gap = 0.2
+
 
     def move(self, face, direction):
         """
@@ -73,11 +79,66 @@ class Cube:
         """
         pass
 
-    def set_cube(self, n):
+    def set_cube(self,x,y,z):
         """
+        this method is going to set the cube to be displayed
+        :return: void
+        """
+        glPushMatrix()
+        glTranslatef((x - 1) * self.cube_size + x * self.gap, (y - 1) * self.cube_size + y * self.gap, (z - 1) * self.cube_size + z * self.gap)
+        # front face : red
+        glColor(1,0,0)
+        glBegin(GL_QUADS)
+        glVertex3f(self.cube_size/2,self.cube_size/2,self.cube_size/2)
+        glVertex3f(-self.cube_size / 2, self.cube_size / 2, self.cube_size / 2)
+        glVertex3f(-self.cube_size / 2, -self.cube_size / 2, self.cube_size / 2)
+        glVertex3f(self.cube_size / 2, -self.cube_size / 2, self.cube_size / 2)
+        glEnd()
+        # back face : orange
+        glColor3f(1, 176.0 / 255.0, 5.0 / 255.0)
+        glBegin(GL_QUADS)
+        glVertex3f(self.cube_size / 2, self.cube_size / 2, -self.cube_size / 2)
+        glVertex3f(-self.cube_size / 2, self.cube_size / 2, -self.cube_size / 2)
+        glVertex3f(-self.cube_size / 2, -self.cube_size / 2, -self.cube_size / 2)
+        glVertex3f(self.cube_size / 2, -self.cube_size / 2, -self.cube_size / 2)
+        glEnd()
 
-        :param
-        :param
-        :return:
-        """
-        pass
+        # top face: blue
+        glColor3f(0, 0, 1)
+        glBegin(GL_QUADS)
+        glVertex3f(self.cube_size / 2, self.cube_size / 2, -self.cube_size / 2)
+        glVertex3f(-self.cube_size / 2, self.cube_size / 2, -self.cube_size / 2)
+        glVertex3f(-self.cube_size / 2, self.cube_size / 2, self.cube_size / 2)
+        glVertex3f(self.cube_size / 2, self.cube_size / 2, self.cube_size / 2)
+        glEnd()
+
+        # bottom face: green
+        glColor3f(0, 1, 0)
+        glBegin(GL_QUADS)
+        glVertex3f(self.cube_size / 2, -self.cube_size / 2, -self.cube_size / 2)
+        glVertex3f(-self.cube_size / 2, -self.cube_size / 2, -self.cube_size / 2)
+        glVertex3f(-self.cube_size / 2, -self.cube_size / 2, self.cube_size / 2)
+        glVertex3f(self.cube_size / 2, -self.cube_size / 2, self.cube_size / 2)
+        glEnd()
+
+        # left face: white
+        glColor3f(1, 1, 1)
+        glBegin(GL_QUADS)
+        glVertex3f(-self.cube_size / 2, self.cube_size / 2, -self.cube_size / 2)
+        glVertex3f(-self.cube_size / 2, self.cube_size / 2, self.cube_size / 2)
+        glVertex3f(-self.cube_size / 2, -self.cube_size / 2, self.cube_size / 2)
+        glVertex3f(-self.cube_size / 2, -self.cube_size / 2, -self.cube_size / 2)
+        glEnd()
+
+        # right face: yellow
+        glColor3f(1, 1, 0)
+        glBegin(GL_QUADS)
+        glVertex3f(self.cube_size / 2, self.cube_size / 2, -self.cube_size / 2)
+        glVertex3f(self.cube_size / 2, self.cube_size / 2, self.cube_size / 2)
+        glVertex3f(self.cube_size / 2, -self.cube_size / 2, self.cube_size / 2)
+        glVertex3f(self.cube_size / 2, -self.cube_size / 2, -self.cube_size / 2)
+        glEnd()
+
+        glPopMatrix()
+
+
