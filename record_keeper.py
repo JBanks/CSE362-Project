@@ -7,7 +7,7 @@ class RecordKeeper:
         self.is_high_score = False
         self.best_times = []
         self.best_moves = []
-        self.cube = Cube()
+        self.cube = Cube() # think this is the wrong way to do this
 
     def get_best_times(self):
         """
@@ -53,7 +53,7 @@ class RecordKeeper:
         :param time: float, the time in seconds that elapsed in the current game
         :return: void
         """
-        self.best_times.append(game.total_time)
+        #self.best_times.append(game.total_time)
         # sort the list
         self.best_moves.append(self.cube.moves)
         # sort the list

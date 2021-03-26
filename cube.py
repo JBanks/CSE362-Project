@@ -4,11 +4,12 @@ from pygame.locals import *
 from OpenGL.GL import *
 from OpenGL.GLU import *
 import math
+import numpy
 
 class Cube:
 
     def __init__(self):
-        self.faces = []  # 6x9 array
+        self.faces = numpy.zeros([6, 3, 3], dtype=int)
         self.moves = 0
         self.phi = math.pi/8  # start at pi/8
         self.theta = math.pi/8
@@ -16,7 +17,6 @@ class Cube:
         self.cube_size = 2
         self.n = 2 #pocket cube TODO change the initialization of n so the user choses
         self.gap = 0.2
-
 
     def move(self, face, direction):
         """
@@ -26,6 +26,7 @@ class Cube:
         :param direction: the direction in which to rotate the given face
         :return: void
         """
+
         pass
 
     def solved(self):
@@ -40,13 +41,12 @@ class Cube:
         This method shuffles the cube by performing 20 random moves
         :param
         :param
-        :return:
+        :return: void
         """
         for i in range(20):
-            face_index = random.randint(0,5)
-            direction_index = random.randint(0,1)
+            face_index = random.randint(0, 5)
+            direction_index = random.randint(0, 1)
             self.move(face_index, direction_index)
-
 
     def update_angle(self, delta_angle, axis):
         """
@@ -81,7 +81,7 @@ class Cube:
         the last move
         :param
         :param
-        :return:
+        :return: void
         """
         pass
 
