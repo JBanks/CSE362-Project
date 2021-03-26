@@ -1,9 +1,13 @@
+from cube import Cube
+# need game
+
 class RecordKeeper:
 
     def __init__(self):
         self.is_high_score = False
         self.best_times = []
         self.best_moves = []
+        self.cube = Cube()
 
     def get_best_times(self):
         """
@@ -29,25 +33,35 @@ class RecordKeeper:
         :param time: float, the time in seconds that elapsed in the current game
         :return: bool is_high_score
         """
-       # if game.total_time < self.best_times[0]:
-       #     self.is_high_score = True
-       #     self.best_times.append(game.total_time)
-        # need to sort the list
-       # elif game.
+
+       #import game to reference time
+        #if GameController.time < self.best_times[0]:
+         #    self.is_high_score = True
+          #   self.best_times.append(game.total_time)
+            # sort the list
+        if self.cube.moves < self.best_moves[0]:
+            self.is_high_score = True
+            self.best_moves.append(self.cube.moves)
+            # sort the list
+
 
 
     def post_high_score(self, moves, time):
         """
-        This will enter the current score into high_scores_list
+        This will enter the current score into either best_times and best_moves
         :param moves: int, the number of moves made by the player in the current game
         :param time: float, the time in seconds that elapsed in the current game
         :return: void
         """
-        pass
+        self.best_times.append(game.total_time)
+        # sort the list
+        self.best_moves.append(self.cube.moves)
+        # sort the list
 
     def clear(self):
         """
-        This will delete all entities in high_scores_list
+        This will delete all entities in best_times and best_moves
         :return: void
         """
-        pass
+        self.best_moves = []
+        self.best_times = []

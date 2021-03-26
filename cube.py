@@ -1,4 +1,5 @@
 import pygame
+import random
 from pygame.locals import *
 from OpenGL.GL import *
 from OpenGL.GLU import *
@@ -36,12 +37,16 @@ class Cube:
 
     def shuffle(self):
         """
-        This method shuffles the cube
+        This method shuffles the cube by performing 20 random moves
         :param
         :param
         :return:
         """
-        pass
+        for i in range(20):
+            face_index = random.randint(0,5)
+            direction_index = random.randint(0,1)
+            self.move(face_index, direction_index)
+
 
     def update_angle(self, delta_angle, axis):
         """
@@ -72,7 +77,8 @@ class Cube:
 
     def undo(self):
         """
-
+        This method returns the cube to the state it was in prior to
+        the last move
         :param
         :param
         :return:
@@ -140,5 +146,7 @@ class Cube:
         glEnd()
 
         glPopMatrix()
+
+
 
 
