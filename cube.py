@@ -5,6 +5,7 @@ from OpenGL.GL import *
 from OpenGL.GLU import *
 import math
 import numpy
+from constants import *
 
 class Cube:
 
@@ -27,7 +28,70 @@ class Cube:
         :return: void
         """
 
-        pass
+        # top: arr[x,0,:]
+        # bottom: arr[x,2,:]
+        # right side: arr[x,:,2]
+        # left side: arr[x,:,0]
+
+        if direction == Direction.CCW:
+            # CCW 90 degree rotation
+
+            if face == Faces.RED:
+                # red face
+
+                self.faces[0, :, :] = self.faces[0, :, :].transpose()
+                self.faces[4, :, 0] = self.faces[0, 0, :]
+                self.faces[1, :, 0] = self.faces[0, :, 2]
+                self.faces[3, :, 2] = self.faces[0, :, 0]
+                self.faces[5, :, 0] = self.faces[0, 2, :]
+
+            elif face == Faces.GREEN:
+                # green face
+
+                self.faces[1, :, :] = self.faces[0, :, :].transpose()
+                self.faces[4, 2, :] = self.faces[1, 0, :]
+                self.faces[0, :, 2] = self.faces[1, :, 0]
+                self.faces[2, :, 0] = self.faces[1, :, 2]
+                self.faces[5, 0, :] = self.faces[1, 2, :]
+
+            elif face == Faces.ORANGE:
+                # orange face
+
+                self.faces[2, :, :] = self.faces[2, :, :].transpose()
+                self.faces[1, :, 2] = self.faces[2, :, 0]
+                self.faces[3, :, 0] = self.faces[2, :, 2]
+                self.faces[4, :, 2] = self.faces[2, 0, :]
+                self.faces[5, :, 2] = self.faces[2, 2, :]
+
+            elif face == Faces.BLUE:
+                # blue face
+
+                self.faces[3, :, :] = self.faces[3, :, :].transpose()
+                self.faces[2, :, 2] = self.faces[3, :, 0]
+                self.faces[0, :, 0] = self.faces[3, :, 2]
+                self.faces[4, 0, :] = self.faces[3, 0, :]
+                self.faces[5, 2, :] = self.faces[3, 2, :]
+
+            elif face == Faces.YELLOW:
+                # yellow face
+
+                self.faces[4, :, :] = self.faces[4, :, :].transpose()
+                self.faces[0, 0, :] = self.faces[4, :, 0]
+                self.faces[2, 0, :] = self.faces[4, :, 2]
+                self.faces[3, 0, :] = self.faces[4, 0, :]
+                self.faces[1, 0, :] = self.faces[4, 2, :]
+
+            elif face == Faces.WHITE:
+                # white face
+
+                self.faces[5, :, :] = self.faces[5, :, :].transpose()
+                self.faces[0, 2, :] = self.faces[5, :, 0]
+                self.faces[1, 2, :] = self.faces[5, 0, :]
+                self.faces[2, 2, :] = self.faces[5, :, 2]
+                self.faces[3, 2, :] = self.faces[5, 2, :]
+
+
+
 
     def solved(self):
         """
