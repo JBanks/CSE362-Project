@@ -201,6 +201,7 @@ class Cube:
         This method returns True if the cube is solved, False otherwise
         :return: bool is_solved
         """
+
         pass
 
     def shuffle(self):
@@ -217,7 +218,8 @@ class Cube:
 
     def update_angle(self, delta_angle, axis):
         """
-
+        This method will update the angle of the cube to be displayed
+        when it is rotated
         :param
         :param
         :return:
@@ -252,7 +254,7 @@ class Cube:
         """
         pass
 
-    def set_cube(self,x,y,z):
+    def set_cube(self, x, y, z):
         """
         this method is going to set the cube to be displayed
         :return: void
