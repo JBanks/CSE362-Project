@@ -33,6 +33,10 @@ class Cube:
         # right side: arr[x,:,2]
         # left side: arr[x,:,0]
 
+        # for CCW rotations, need to flip whenever moving the bottom
+        # of one 3x3 array to the right side of another, or when moving
+        # the top of one to the left side of another
+
         if direction == Direction.CCW:
             # CCW 90 degree rotation
 
@@ -41,11 +45,11 @@ class Cube:
 
                 self.faces[0, :, :] = numpy.rot90(self.faces[0, :, :])
                 temp1 = self.faces[1, :, 0]
-                temp2 = self.faces[4, 2, :]
+                temp2 = numpy.flip(self.faces[4, 2, :])
                 self.faces[4, 2, :] = temp1
                 temp1 = self.faces[3, :, 2]
                 self.faces[3, :, 2] = temp2
-                temp2 = self.faces[5, 0, :]
+                temp2 = numpy.flip(self.faces[5, 0, :])
                 self.faces[5, 0, :] = temp1
                 self.faces[1, : 0] = temp2
 
@@ -54,11 +58,11 @@ class Cube:
 
                 self.faces[1, :, :] = numpy.rot90(self.faces[1, :, :])
                 temp1 = self.faces[2, :, 0]
-                temp2 = self.faces[4, 2, :]
+                temp2 = numpy.flip(self.faces[4, 2, :])
                 self.faces[4, 2, :] = temp1
                 temp1 = self.faces[0, :, 2]
                 self.faces[0, :, 2] = temp2
-                temp2 = self.faces[5, 0, :]
+                temp2 = numpy.flip(self.faces[5, 0, :])
                 self.faces[5, 0, :] = temp1
                 self.faces[2, : 0] = temp2
 
@@ -67,11 +71,11 @@ class Cube:
 
                 self.faces[2, :, :] = numpy.rot90(self.faces[2, :, :])
                 temp1 = self.faces[3, :, 0]
-                temp2 = self.faces[4, 2, :]
+                temp2 = numpy.flip(self.faces[4, 2, :])
                 self.faces[4, 2, :] = temp1
                 temp1 = self.faces[1, :, 2]
                 self.faces[1, :, 2] = temp2
-                temp2 = self.faces[5, 0, :]
+                temp2 = numpy.flip(self.faces[5, 0, :])
                 self.faces[5, 0, :] = temp1
                 self.faces[3, : 0] = temp2
 
@@ -80,11 +84,11 @@ class Cube:
 
                 self.faces[3, :, :] = numpy.rot90(self.faces[3, :, :])
                 temp1 = self.faces[0, :, 0]
-                temp2 = self.faces[4, 2, :]
+                temp2 = numpy.flip(self.faces[4, 2, :])
                 self.faces[4, 2, :] = temp1
                 temp1 = self.faces[2, :, 2]
                 self.faces[2, :, 2] = temp2
-                temp2 = self.faces[5, 0, :]
+                temp2 = numpy.flip(self.faces[5, 0, :])
                 self.faces[5, 0, :] = temp1
                 self.faces[0, : 0] = temp2
 
@@ -93,11 +97,11 @@ class Cube:
 
                 self.faces[4, :, :] = numpy.rot90(self.faces[4, :, :])
                 temp1 = self.faces[2, :, 0]
-                temp2 = self.faces[3, 2, :]
+                temp2 = numpy.flip(self.faces[3, 2, :])
                 self.faces[3, 2, :] = temp1
                 temp1 = self.faces[0, :, 2]
                 self.faces[0, :, 2] = temp2
-                temp2 = self.faces[1, 0, :]
+                temp2 = numpy.flip(self.faces[1, 0, :])
                 self.faces[1, 0, :] = temp1
                 self.faces[2, : 0] = temp2
 
@@ -106,13 +110,17 @@ class Cube:
 
                 self.faces[5, :, :] = numpy.rot90(self.faces[5, :, :])
                 temp1 = self.faces[2, :, 0]
-                temp2 = self.faces[1, 2, :]
+                temp2 = numpy.flip(self.faces[1, 2, :])
                 self.faces[1, 2, :] = temp1
                 temp1 = self.faces[0, :, 2]
                 self.faces[0, :, 2] = temp2
-                temp2 = self.faces[3, 0, :]
+                temp2 = numpy.flip(self.faces[3, 0, :])
                 self.faces[3, 0, :] = temp1
                 self.faces[2, : 0] = temp2
+
+        # for CW rotations, need to flip whenever moving the left side
+        # of one 3x3 array to the top of another, or when moving
+        # the right side of one to the bottom of another
 
         elif direction == Direction.CW:
             # CW 90 degree rotation
@@ -124,10 +132,10 @@ class Cube:
 
             if face == Faces.RED:
                 self.faces[0, :, :] = numpy.rot90(self.faces[0, :, :], 3)
-                temp1 = self.faces[3, :, 2]
+                temp1 = numpy.flip(self.faces[3, :, 2])
                 temp2 = self.faces[4, 2, :]
                 self.faces[4, 2, :] = temp1
-                temp1 = self.faces[1, :, 0]
+                temp1 = numpy.flip(self.faces[1, :, 0])
                 self.faces[1, :, 0] = temp2
                 temp2 = self.faces[5, 0, :]
                 self.faces[5, 0, :] = temp1
@@ -135,10 +143,10 @@ class Cube:
 
             elif face == Faces.GREEN:
                 self.faces[1, :, :] = numpy.rot90(self.faces[1, :, :], 3)
-                temp1 = self.faces[0, :, 2]
+                temp1 = numpy.flip(self.faces[0, :, 2])
                 temp2 = self.faces[4, 2, :]
                 self.faces[4, 2, :] = temp1
-                temp1 = self.faces[2, :, 0]
+                temp1 = numpy.flip(self.faces[2, :, 0])
                 self.faces[2, :, 0] = temp2
                 temp2 = self.faces[5, 0, :]
                 self.faces[5, 0, :] = temp1
@@ -146,10 +154,10 @@ class Cube:
 
             elif face == Faces.ORANGE:
                 self.faces[2, :, :] = numpy.rot90(self.faces[2, :, :], 3)
-                temp1 = self.faces[1, :, 2]
+                temp1 = numpy.flip(self.faces[1, :, 2])
                 temp2 = self.faces[4, 2, :]
                 self.faces[4, 2, :] = temp1
-                temp1 = self.faces[3, :, 0]
+                temp1 = numpy.flip(self.faces[3, :, 0])
                 self.faces[3, :, 0] = temp2
                 temp2 = self.faces[5, 0, :]
                 self.faces[5, 0, :] = temp1
@@ -157,10 +165,10 @@ class Cube:
 
             elif face == Faces.BLUE:
                 self.faces[3, :, :] = numpy.rot90(self.faces[3, :, :], 3)
-                temp1 = self.faces[2, :, 2]
+                temp1 = numpy.flip(self.faces[2, :, 2])
                 temp2 = self.faces[4, 2, :]
                 self.faces[4, 2, :] = temp1
-                temp1 = self.faces[0, :, 0]
+                temp1 = numpy.flip(self.faces[0, :, 0])
                 self.faces[0, :, 0] = temp2
                 temp2 = self.faces[5, 0, :]
                 self.faces[5, 0, :] = temp1
@@ -168,10 +176,10 @@ class Cube:
 
             elif face == Faces.YELLOW:
                 self.faces[4, :, :] = numpy.rot90(self.faces[4, :, :], 3)
-                temp1 = self.faces[0, :, 2]
+                temp1 = numpy.flip(self.faces[0, :, 2])
                 temp2 = self.faces[3, 2, :]
                 self.faces[3, 2, :] = temp1
-                temp1 = self.faces[2, :, 0]
+                temp1 = numpy.flip(self.faces[2, :, 0])
                 self.faces[2, :, 0] = temp2
                 temp2 = self.faces[1, 0, :]
                 self.faces[1, 0, :] = temp1
@@ -179,10 +187,10 @@ class Cube:
 
             elif face == Faces.WHITE:
                 self.faces[5, :, :] = numpy.rot90(self.faces[5, :, :], 3)
-                temp1 = self.faces[0, :, 2]
+                temp1 = numpy.flip(self.faces[0, :, 2])
                 temp2 = self.faces[1, 2, :]
                 self.faces[1, 2, :] = temp1
-                temp1 = self.faces[2, :, 0]
+                temp1 = numpy.flip(self.faces[2, :, 0])
                 self.faces[2, :, 0] = temp2
                 temp2 = self.faces[3, 0, :]
                 self.faces[3, 0, :] = temp1
