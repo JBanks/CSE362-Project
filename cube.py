@@ -1,4 +1,3 @@
-from display import Display
 import random
 import math
 import numpy
