@@ -34,15 +34,7 @@ class Display:
                 :return: void
                 """
         self.faces = faces
-        # i = 0
-        # n = 2
-        # for colors in range(6):
-        #     for r in range(n):
-        #         for c in range(n):
-        #             self.faces[colors, r, c] = i
-        #     i += 1
         n = len(self.faces[0][1])
-        n = 2
 
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
@@ -67,7 +59,6 @@ class Display:
 
         glTranslatef((x - 1) * self.cube_size + x * self.gap, (-y + 1) * self.cube_size - y * self.gap, (-z + 1) * self.cube_size - z * self.gap)
         # front face : red
-        # glColor(1,0,0)
         color = self.faces[0][y][x]
         color = RGB.rgb.get(color)
         glColor(color)
@@ -180,7 +171,6 @@ class Display:
         gluPerspective(45.0, self.w/self.h,1.0,1000.0)
         glMatrixMode(GL_MODELVIEW)
         glLoadIdentity()
-        print("ok")
 
 # disp = Display()
 # while True:
