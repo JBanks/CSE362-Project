@@ -4,6 +4,7 @@ import math
 import numpy
 from constants import *
 
+
 class Cube:
 
     def __init__(self):
@@ -198,6 +199,8 @@ class Cube:
                 self.faces[3, 0, :] = temp1
                 self.faces[0, :, 2] = temp2
 
+        self.moves += 1
+
     def solved(self):
         """
         This method returns True if the cube is solved, False otherwise
@@ -259,7 +262,7 @@ class Cube:
         """
         pass
 
-    def set_cube(self,n):
+    def set_cube(self, n):
         """
         this method is going to set the cube to be displayed
         :param n = the dimension chosen.
