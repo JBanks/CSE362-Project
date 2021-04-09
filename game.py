@@ -15,6 +15,7 @@ class GameController:
         self.view = view
         self.cube = cube
         self.solution_provider = SolutionProvider(self.cube)
+        self.solution_provider.add_observer(self)
         self.record_keeper = RecordKeeper()
         self.dimensions = 3
         self.control_state = ControlStates.WHOLE
