@@ -37,3 +37,7 @@ class Direction(IntEnum):
     COUNTERCLOCKWISE = auto()
     CW = CLOCKWISE
     CCW = COUNTERCLOCKWISE
+
+
+class RGB:
+    rgb = {0: (1, 0, 0), 1: (0, 1, 0), 2: (1, 176.0 / 255.0, 5.0 / 255.0), 3: (0, 0, 1), 4: (1, 1, 0), 5: (1, 1, 1), }

@@ -1,8 +1,5 @@
-import pygame
+from display import Display
 import random
-from pygame.locals import *
-from OpenGL.GL import *
-from OpenGL.GLU import *
 import math
 import numpy
 from constants import *
@@ -10,14 +7,15 @@ from constants import *
 class Cube:
 
     def __init__(self):
-        self.faces = numpy.zeros([6, 3, 3], dtype=int)
         self.moves = 0
         self.phi = math.pi/8  # start at pi/8
         self.theta = math.pi/8
         self.active_face = 0
-        self.cube_size = 2
-        self.n = 2 #pocket cube TODO change the initialization of n so the user choses
-        self.gap = 0.2
+        self.display = Display()
+        self.set_cube(3)#TODO just for test
+
+    def print_faces(self):
+        print(self.faces)
 
     def move(self, face, direction):
         """
@@ -254,68 +252,24 @@ class Cube:
         """
         pass
 
-    def set_cube(self, x, y, z):
+    def set_cube(self,n):
         """
         this method is going to set the cube to be displayed
+        :param n = the dimension chosen.
         :return: void
         """
-        glPushMatrix()
-        glTranslatef((x - 1) * self.cube_size + x * self.gap, (y - 1) * self.cube_size + y * self.gap, (z - 1) * self.cube_size + z * self.gap)
-        # front face : red
-        glColor(1,0,0)
-        glBegin(GL_QUADS)
-        glVertex3f(self.cube_size/2,self.cube_size/2,self.cube_size/2)
-        glVertex3f(-self.cube_size / 2, self.cube_size / 2, self.cube_size / 2)
-        glVertex3f(-self.cube_size / 2, -self.cube_size / 2, self.cube_size / 2)
-        glVertex3f(self.cube_size / 2, -self.cube_size / 2, self.cube_size / 2)
-        glEnd()
-        # back face : orange
-        glColor3f(1, 176.0 / 255.0, 5.0 / 255.0)
-        glBegin(GL_QUADS)
-        glVertex3f(self.cube_size / 2, self.cube_size / 2, -self.cube_size / 2)
-        glVertex3f(-self.cube_size / 2, self.cube_size / 2, -self.cube_size / 2)
-        glVertex3f(-self.cube_size / 2, -self.cube_size / 2, -self.cube_size / 2)
-        glVertex3f(self.cube_size / 2, -self.cube_size / 2, -self.cube_size / 2)
-        glEnd()
-
-        # top face: blue
-        glColor3f(0, 0, 1)
-        glBegin(GL_QUADS)
-        glVertex3f(self.cube_size / 2, self.cube_size / 2, -self.cube_size / 2)
-        glVertex3f(-self.cube_size / 2, self.cube_size / 2, -self.cube_size / 2)
-        glVertex3f(-self.cube_size / 2, self.cube_size / 2, self.cube_size / 2)
-        glVertex3f(self.cube_size / 2, self.cube_size / 2, self.cube_size / 2)
-        glEnd()
-
-        # bottom face: green
-        glColor3f(0, 1, 0)
-        glBegin(GL_QUADS)
-        glVertex3f(self.cube_size / 2, -self.cube_size / 2, -self.cube_size / 2)
-        glVertex3f(-self.cube_size / 2, -self.cube_size / 2, -self.cube_size / 2)
-        glVertex3f(-self.cube_size / 2, -self.cube_size / 2, self.cube_size / 2)
-        glVertex3f(self.cube_size / 2, -self.cube_size / 2, self.cube_size / 2)
-        glEnd()
-
-        # left face: white
-        glColor3f(1, 1, 1)
-        glBegin(GL_QUADS)
-        glVertex3f(-self.cube_size / 2, self.cube_size / 2, -self.cube_size / 2)
-        glVertex3f(-self.cube_size / 2, self.cube_size / 2, self.cube_size / 2)
-        glVertex3f(-self.cube_size / 2, -self.cube_size / 2, self.cube_size / 2)
-        glVertex3f(-self.cube_size / 2, -self.cube_size / 2, -self.cube_size / 2)
-        glEnd()
-
-        # right face: yellow
-        glColor3f(1, 1, 0)
-        glBegin(GL_QUADS)
-        glVertex3f(self.cube_size / 2, self.cube_size / 2, -self.cube_size / 2)
-        glVertex3f(self.cube_size / 2, self.cube_size / 2, self.cube_size / 2)
-        glVertex3f(self.cube_size / 2, -self.cube_size / 2, self.cube_size / 2)
-        glVertex3f(self.cube_size / 2, -self.cube_size / 2, -self.cube_size / 2)
-        glEnd()
-
-        glPopMatrix()
+        self.faces = numpy.zeros([6, n, n], dtype=int)
+        i = 0
+        for colors in range(6):
+            for r in range(n):
+                for c in range(n):
+                    self.faces[colors,r,c] = i
+            i+=1
+        # self.display.update_move(self.faces)
+        self.display.display(self.faces)
 
 
-
-
+cb = Cube()
+cb.print_faces()
+cb.move(Faces.RED,Direction.CW)
+cb.print_faces()

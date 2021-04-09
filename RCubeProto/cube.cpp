@@ -4,8 +4,8 @@
 #include <GL/freeglut.h> 
 #include <GL/glu.h> 
 
-#include <iostream> 
-#include <vector>
+#include <iostream>
+//#include <vector>
 
 using namespace std;
 
@@ -380,7 +380,7 @@ void setCube(int x, int y, int z) {
 
     glPopMatrix();
 
-    cube_id++; // id the cube TODO not sure about this location
+    cube_id++; // id the cube
 }
 
 void display() {
