@@ -12,11 +12,11 @@ class Cube:
     def __init__(self):
         self.faces = numpy.zeros([6, 3, 3], dtype=int)
         self.moves = 0
-        self.phi = math.pi/8  # start at pi/8
-        self.theta = math.pi/8
+        self.phi = math.pi/8  # horizontal rotation
+        self.theta = math.pi/8 # vertical rotation
         self.active_face = 0
         self.cube_size = 2
-        self.n = 2 #pocket cube TODO change the initialization of n so the user choses
+        self.n = 2 # pocket cube TODO change the initialization of n so the user choses
         self.gap = 0.2
 
     def move(self, face, direction):
@@ -220,11 +220,14 @@ class Cube:
         """
         This method will update the angle of the cube to be displayed
         when it is rotated
-        :param
-        :param
-        :return:
+        :param delta_angle: amount by which to rotate the cube in degrees
+        :param axis: 0 (horizontal) or 1 (vertical)
+        :return: void
         """
-        pass
+        if axis == 0:
+            self.phi += delta_angle
+        else:
+            self.theta += delta_angle
 
     def notify(self):
         """
