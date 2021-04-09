@@ -11,7 +11,7 @@ class Cube:
         self.phi = math.pi/8  # start at pi/8
         self.theta = math.pi/8
         self.active_face = 0
-        self.display = Display()
+        # self.display = Display()
         self.set_cube(3)#TODO just for test
 
     def print_faces(self):
@@ -266,10 +266,4 @@ class Cube:
                     self.faces[colors,r,c] = i
             i+=1
         # self.display.update_move(self.faces)
-        self.display.display(self.faces)
-
-
-cb = Cube()
-cb.print_faces()
-cb.move(Faces.RED,Direction.CW)
-cb.print_faces()
+        # self.display.display(self.faces)
