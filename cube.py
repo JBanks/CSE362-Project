@@ -206,8 +206,17 @@ class Cube:
         This method returns True if the cube is solved, False otherwise
         :return: bool is_solved
         """
+        for side in range(6):  # repeat for each face
+            compare = self.faces[side, 0, 0]  # compare all squares to top left
+            for i in range(3):
+                for j in range(3):
+                    if self.faces[side, i, j] != compare:  # if any not the same return false
+                        return False
 
-        pass
+        return True
+
+
+
 
     def shuffle(self):
         """
