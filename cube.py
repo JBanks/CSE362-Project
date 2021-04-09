@@ -44,79 +44,79 @@ class Cube:
                 # red face
 
                 self.faces[0, :, :] = numpy.rot90(self.faces[0, :, :])
-                temp1 = self.faces[1, :, 0]
-                temp2 = numpy.flip(self.faces[4, 2, :])
+                temp1 = self.faces[1, :, 0].copy()
+                temp2 = numpy.flip(self.faces[4, 2, :]).copy()
                 self.faces[4, 2, :] = temp1
-                temp1 = self.faces[3, :, 2]
+                temp1 = self.faces[3, :, 2].copy()
                 self.faces[3, :, 2] = temp2
-                temp2 = numpy.flip(self.faces[5, 0, :])
+                temp2 = numpy.flip(self.faces[5, 0, :]).copy()
                 self.faces[5, 0, :] = temp1
-                self.faces[1, : 0] = temp2
+                self.faces[1, :, 0] = temp2
 
             elif face == Faces.GREEN:
                 # green face
 
                 self.faces[1, :, :] = numpy.rot90(self.faces[1, :, :])
-                temp1 = self.faces[2, :, 0]
-                temp2 = numpy.flip(self.faces[4, 2, :])
+                temp1 = self.faces[2, :, 0].copy()
+                temp2 = numpy.flip(self.faces[4, 2, :]).copy()
                 self.faces[4, 2, :] = temp1
-                temp1 = self.faces[0, :, 2]
+                temp1 = self.faces[0, :, 2].copy()
                 self.faces[0, :, 2] = temp2
-                temp2 = numpy.flip(self.faces[5, 0, :])
+                temp2 = numpy.flip(self.faces[5, 0, :]).copy()
                 self.faces[5, 0, :] = temp1
-                self.faces[2, : 0] = temp2
+                self.faces[2, :, 0] = temp2
 
             elif face == Faces.ORANGE:
                 # orange face
 
                 self.faces[2, :, :] = numpy.rot90(self.faces[2, :, :])
-                temp1 = self.faces[3, :, 0]
-                temp2 = numpy.flip(self.faces[4, 2, :])
+                temp1 = self.faces[3, :, 0].copy()
+                temp2 = numpy.flip(self.faces[4, 2, :]).copy()
                 self.faces[4, 2, :] = temp1
-                temp1 = self.faces[1, :, 2]
+                temp1 = self.faces[1, :, 2].copy()
                 self.faces[1, :, 2] = temp2
-                temp2 = numpy.flip(self.faces[5, 0, :])
+                temp2 = numpy.flip(self.faces[5, 0, :]).copy()
                 self.faces[5, 0, :] = temp1
-                self.faces[3, : 0] = temp2
+                self.faces[3, :, 0] = temp2
 
             elif face == Faces.BLUE:
                 # blue face
 
                 self.faces[3, :, :] = numpy.rot90(self.faces[3, :, :])
-                temp1 = self.faces[0, :, 0]
-                temp2 = numpy.flip(self.faces[4, 2, :])
+                temp1 = self.faces[0, :, 0].copy()
+                temp2 = numpy.flip(self.faces[4, 2, :]).copy()
                 self.faces[4, 2, :] = temp1
-                temp1 = self.faces[2, :, 2]
+                temp1 = self.faces[2, :, 2].copy()
                 self.faces[2, :, 2] = temp2
-                temp2 = numpy.flip(self.faces[5, 0, :])
+                temp2 = numpy.flip(self.faces[5, 0, :]).copy()
                 self.faces[5, 0, :] = temp1
-                self.faces[0, : 0] = temp2
+                self.faces[0, :, 0] = temp2
 
             elif face == Faces.YELLOW:
                 # yellow face
 
                 self.faces[4, :, :] = numpy.rot90(self.faces[4, :, :])
-                temp1 = self.faces[2, :, 0]
-                temp2 = numpy.flip(self.faces[3, 2, :])
+                temp1 = self.faces[2, :, 0].copy()
+                temp2 = numpy.flip(self.faces[3, 2, :]).copy()
                 self.faces[3, 2, :] = temp1
-                temp1 = self.faces[0, :, 2]
+                temp1 = self.faces[0, :, 2].copy()
                 self.faces[0, :, 2] = temp2
-                temp2 = numpy.flip(self.faces[1, 0, :])
+                temp2 = numpy.flip(self.faces[1, 0, :]).copy()
                 self.faces[1, 0, :] = temp1
-                self.faces[2, : 0] = temp2
+                self.faces[2, :, 0] = temp2
 
             elif face == Faces.WHITE:
                 # white face
 
                 self.faces[5, :, :] = numpy.rot90(self.faces[5, :, :])
-                temp1 = self.faces[2, :, 0]
-                temp2 = numpy.flip(self.faces[1, 2, :])
+                temp1 = self.faces[2, :, 0].copy()
+                temp2 = numpy.flip(self.faces[1, 2, :]).copy()
                 self.faces[1, 2, :] = temp1
-                temp1 = self.faces[0, :, 2]
+                temp1 = self.faces[0, :, 2].copy()
                 self.faces[0, :, 2] = temp2
-                temp2 = numpy.flip(self.faces[3, 0, :])
+                temp2 = numpy.flip(self.faces[3, 0, :]).copy()
                 self.faces[3, 0, :] = temp1
-                self.faces[2, : 0] = temp2
+                self.faces[2, :, 0] = temp2
 
         # for CW rotations, need to flip whenever moving the left side
         # of one 3x3 array to the top of another, or when moving
@@ -132,69 +132,69 @@ class Cube:
 
             if face == Faces.RED:
                 self.faces[0, :, :] = numpy.rot90(self.faces[0, :, :], 3)
-                temp1 = numpy.flip(self.faces[3, :, 2])
-                temp2 = self.faces[4, 2, :]
+                temp1 = numpy.flip(self.faces[3, :, 2]).copy()
+                temp2 = self.faces[4, 2, :].copy()
                 self.faces[4, 2, :] = temp1
-                temp1 = numpy.flip(self.faces[1, :, 0])
+                temp1 = numpy.flip(self.faces[1, :, 0]).copy()
                 self.faces[1, :, 0] = temp2
-                temp2 = self.faces[5, 0, :]
+                temp2 = self.faces[5, 0, :].copy()
                 self.faces[5, 0, :] = temp1
-                self.faces[3, : 2] = temp2
+                self.faces[3, :, 2] = temp2
 
             elif face == Faces.GREEN:
                 self.faces[1, :, :] = numpy.rot90(self.faces[1, :, :], 3)
-                temp1 = numpy.flip(self.faces[0, :, 2])
-                temp2 = self.faces[4, 2, :]
+                temp1 = numpy.flip(self.faces[0, :, 2]).copy()
+                temp2 = self.faces[4, 2, :].copy()
                 self.faces[4, 2, :] = temp1
-                temp1 = numpy.flip(self.faces[2, :, 0])
+                temp1 = numpy.flip(self.faces[2, :, 0]).copy()
                 self.faces[2, :, 0] = temp2
-                temp2 = self.faces[5, 0, :]
+                temp2 = self.faces[5, 0, :].copy()
                 self.faces[5, 0, :] = temp1
-                self.faces[0, : 2] = temp2
+                self.faces[0, :, 2] = temp2
 
             elif face == Faces.ORANGE:
                 self.faces[2, :, :] = numpy.rot90(self.faces[2, :, :], 3)
-                temp1 = numpy.flip(self.faces[1, :, 2])
-                temp2 = self.faces[4, 2, :]
+                temp1 = numpy.flip(self.faces[1, :, 2]).copy()
+                temp2 = self.faces[4, 2, :].copy()
                 self.faces[4, 2, :] = temp1
-                temp1 = numpy.flip(self.faces[3, :, 0])
+                temp1 = numpy.flip(self.faces[3, :, 0]).copy()
                 self.faces[3, :, 0] = temp2
-                temp2 = self.faces[5, 0, :]
+                temp2 = self.faces[5, 0, :].copy()
                 self.faces[5, 0, :] = temp1
-                self.faces[1, : 2] = temp2
+                self.faces[1, :, 2] = temp2
 
             elif face == Faces.BLUE:
                 self.faces[3, :, :] = numpy.rot90(self.faces[3, :, :], 3)
-                temp1 = numpy.flip(self.faces[2, :, 2])
-                temp2 = self.faces[4, 2, :]
+                temp1 = numpy.flip(self.faces[2, :, 2]).copy()
+                temp2 = self.faces[4, 2, :].copy()
                 self.faces[4, 2, :] = temp1
-                temp1 = numpy.flip(self.faces[0, :, 0])
+                temp1 = numpy.flip(self.faces[0, :, 0]).copy()
                 self.faces[0, :, 0] = temp2
-                temp2 = self.faces[5, 0, :]
+                temp2 = self.faces[5, 0, :].copy()
                 self.faces[5, 0, :] = temp1
-                self.faces[2, : 2] = temp2
+                self.faces[2, :, 2] = temp2
 
             elif face == Faces.YELLOW:
                 self.faces[4, :, :] = numpy.rot90(self.faces[4, :, :], 3)
-                temp1 = numpy.flip(self.faces[0, :, 2])
-                temp2 = self.faces[3, 2, :]
+                temp1 = numpy.flip(self.faces[0, :, 2]).copy()
+                temp2 = self.faces[3, 2, :].copy()
                 self.faces[3, 2, :] = temp1
-                temp1 = numpy.flip(self.faces[2, :, 0])
+                temp1 = numpy.flip(self.faces[2, :, 0]).copy()
                 self.faces[2, :, 0] = temp2
-                temp2 = self.faces[1, 0, :]
+                temp2 = self.faces[1, 0, :].copy()
                 self.faces[1, 0, :] = temp1
-                self.faces[0, : 2] = temp2
+                self.faces[0, :, 2] = temp2
 
             elif face == Faces.WHITE:
                 self.faces[5, :, :] = numpy.rot90(self.faces[5, :, :], 3)
-                temp1 = numpy.flip(self.faces[0, :, 2])
-                temp2 = self.faces[1, 2, :]
+                temp1 = numpy.flip(self.faces[0, :, 2]).copy()
+                temp2 = self.faces[1, 2, :].copy()
                 self.faces[1, 2, :] = temp1
-                temp1 = numpy.flip(self.faces[2, :, 0])
+                temp1 = numpy.flip(self.faces[2, :, 0]).copy()
                 self.faces[2, :, 0] = temp2
-                temp2 = self.faces[3, 0, :]
+                temp2 = self.faces[3, 0, :].copy()
                 self.faces[3, 0, :] = temp1
-                self.faces[0, : 2] = temp2
+                self.faces[0, :, 2] = temp2
 
     def solved(self):
         """
