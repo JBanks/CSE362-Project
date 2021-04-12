@@ -9,6 +9,7 @@ class Cube:
 
     def __init__(self):
         self.moves = 0
+        self.time = 0
         self.phi = math.pi/8  # horizontal rotation
         self.theta = math.pi/8 # vertical rotation
         self.active_face = 0
@@ -210,7 +211,7 @@ class Cube:
             compare = self.faces[side, 0, 0]  # compare all squares to top left
             for i in range(3):
                 for j in range(3):
-                    if self.faces[side, i, j] != compare:  # if any not the same return false
+                    if self.faces[side, i, j] != compare:  # if any not the same, return false
                         return False
 
         return True
