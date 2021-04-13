@@ -1,5 +1,4 @@
-from cube import Cube
-# need game
+
 
 class RecordKeeper:
 
@@ -7,7 +6,6 @@ class RecordKeeper:
         self.is_high_score = False
         self.best_times = []
         self.best_moves = []
-        self.cube = Cube() # think this is the wrong way to do this
 
     def get_best_times(self):
         """
@@ -33,18 +31,17 @@ class RecordKeeper:
         :param time: float, the time in seconds that elapsed in the current game
         :return: bool is_high_score
         """
+        self.is_high_score = False
 
-       #import game to reference time
-        #if GameController.time < self.best_times[0]:
-         #    self.is_high_score = True
-          #   self.best_times.append(game.total_time)
-            # sort the list
-        if self.cube.moves < self.best_moves[0]:
+        # check if a time high score
+        if time < self.best_times[0]:
             self.is_high_score = True
-            self.best_moves.append(self.cube.moves)
-            # sort the list
 
+        # check if a moves high score
+        if moves < self.best_moves[0]:
+            self.is_high_score = True
 
+        return self.is_high_score
 
     def post_high_score(self, moves, time):
         """
@@ -53,10 +50,11 @@ class RecordKeeper:
         :param time: float, the time in seconds that elapsed in the current game
         :return: void
         """
-        #self.best_times.append(game.total_time)
-        # sort the list
-        self.best_moves.append(self.cube.moves)
-        # sort the list
+        self.best_times.append(time)
+        self.best_times.sort()
+
+        self.best_moves.append(moves)
+        self.best_moves.sort()
 
     def clear(self):
         """

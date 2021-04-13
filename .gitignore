@@ -167,3 +167,4 @@ dmypy.json
 *.app
 .idea/misc.xml
 .idea/Rubiks.iml
+/scratch.py
