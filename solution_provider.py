@@ -5,6 +5,12 @@ import cube
 
 class Node:
     def __init__(self, state, action=None, parent=None):
+        """
+        Initialize a node for representing the path to a solution
+        :param state: either the array of faces, or the cube object
+        :param action: the action that was taken to achieve the current state
+        :param parent: a reference to the node that was the source of the current state
+        """
         self.parent = parent
         self.action = action
         self.steps = None
@@ -15,13 +21,25 @@ class Node:
             self.state = state
         self.calculate_hash()
 
-    def __eq__(self, other_node):
+    def __eq__(self, other):
         """
         Overloads the == operator to compare if two nodes have equal states by using the hashes.
-        :param other_node: A node that represents a rubik's cube
+        :param other: A node that represents a rubik's cube
         :return: boolean representing hash equality
         """
-        return self.hash == other_node.hash
+        return self.hash == other.hash
+
+    def __lt__(self, other):
+        return self.hash < other.hash
+
+    def __le__(self, other):
+        return self.hash <= other.hash
+
+    def __gt__(self, other):
+        return self.hash > other.hash
+
+    def __ge__(self, other):
+        return self.hash >= other.hash
 
     def calculate_hash(self):
         """
@@ -44,12 +62,20 @@ class Node:
 
 
 def path(start_side, end_side):
+    """
+    Develop a list of actions from two sides of a perimeter search
+    :param start_side: the side of the path that represents to source state
+    :param end_side: the side of the path that represents the destination state
+    :return: a concatenated list, with one of the actions of one list reversed
+    """
     actions = []
     while start_side is not None:
-        actions.insert(0, start_side.action)
+        if start_side.action is not None:
+            actions.insert(0, start_side.action)
         start_side = start_side.parent
     while end_side is not None:
-        actions.append(reverse(end_side.action))
+        if end_side.action is not None:
+            actions.append(reverse(end_side.action))
         end_side = end_side.parent
     return actions
 
@@ -59,10 +85,13 @@ def simulate_move(node, move):
     updated_state = cube.Cube.simulate_move(node.state, move)
     new_node = Node(updated_state, action=move, parent=node)
     return new_node
-    :param node: 
-    :param move: 
-    :return: 
+    :param node: The current node
+    :param move: A tuple of face and direction showing which move to make
+    :return: a new node of the updated state with the action and parent set
     """
+    direction = move[1]
+    face = move[0]
+    faces = node.state.copy()
     """
     This method causes a 90 degree rotation of a specific face
     of the cube (this is what we have defined as a "move")
@@ -71,9 +100,14 @@ def simulate_move(node, move):
     :return: void
     """
 
-    direction = move[1]
-    face = move[0]
-    faces = node.state.copy()
+    # top: arr[x,0,:]
+    # bottom: arr[x,2,:]
+    # right side: arr[x,:,2]
+    # left side: arr[x,:,0]
+
+    # for CCW rotations, need to flip whenever moving the bottom
+    # of one 3x3 array to the right side of another, or when moving
+    # the top of one to the left side of another
 
     if direction == Direction.CCW:
         # CCW 90 degree rotation
@@ -83,12 +117,12 @@ def simulate_move(node, move):
 
             faces[0, :, :] = np.rot90(faces[0, :, :])
             temp1 = faces[1, :, 0].copy()
-            temp2 = np.flip(faces[4, 2, :]).copy()
-            faces[4, 2, :] = temp1
+            temp2 = np.flip(faces[4, :, 0]).copy()
+            faces[4, :, 0] = temp1
             temp1 = faces[3, :, 2].copy()
             faces[3, :, 2] = temp2
-            temp2 = np.flip(faces[5, 0, :]).copy()
-            faces[5, 0, :] = temp1
+            temp2 = np.flip(faces[5, :, 0]).copy()
+            faces[5, :, 0] = temp1
             faces[1, :, 0] = temp2
 
         elif face == Faces.GREEN:
@@ -109,12 +143,12 @@ def simulate_move(node, move):
 
             faces[2, :, :] = np.rot90(faces[2, :, :])
             temp1 = faces[3, :, 0].copy()
-            temp2 = np.flip(faces[4, 2, :]).copy()
-            faces[4, 2, :] = temp1
+            temp2 = np.flip(faces[4, :, 2]).copy()
+            faces[4, :, 2] = temp1
             temp1 = faces[1, :, 2].copy()
             faces[1, :, 2] = temp2
-            temp2 = np.flip(faces[5, 0, :]).copy()
-            faces[5, 0, :] = temp1
+            temp2 = np.flip(faces[5, :, 2]).copy()
+            faces[5, :, 2] = temp1
             faces[3, :, 0] = temp2
 
         elif face == Faces.BLUE:
@@ -122,39 +156,39 @@ def simulate_move(node, move):
 
             faces[3, :, :] = np.rot90(faces[3, :, :])
             temp1 = faces[0, :, 0].copy()
-            temp2 = np.flip(faces[4, 2, :]).copy()
-            faces[4, 2, :] = temp1
+            temp2 = np.flip(faces[4, 0, :]).copy()
+            faces[4, 0, :] = temp1
             temp1 = faces[2, :, 2].copy()
             faces[2, :, 2] = temp2
-            temp2 = np.flip(faces[5, 0, :]).copy()
-            faces[5, 0, :] = temp1
+            temp2 = np.flip(faces[5, 2, :]).copy()
+            faces[5, 2, :] = temp1
             faces[0, :, 0] = temp2
 
         elif face == Faces.YELLOW:
             # yellow face
 
             faces[4, :, :] = np.rot90(faces[4, :, :])
-            temp1 = faces[2, :, 0].copy()
-            temp2 = np.flip(faces[3, 2, :]).copy()
-            faces[3, 2, :] = temp1
-            temp1 = faces[0, :, 2].copy()
-            faces[0, :, 2] = temp2
+            temp1 = faces[2, 0, :].copy()
+            temp2 = np.flip(faces[3, 0, :]).copy()
+            faces[3, 0, :] = temp1
+            temp1 = faces[0, 0, :].copy()
+            faces[0, 0, :] = temp2
             temp2 = np.flip(faces[1, 0, :]).copy()
             faces[1, 0, :] = temp1
-            faces[2, :, 0] = temp2
+            faces[2, 0, :] = temp2
 
         elif face == Faces.WHITE:
             # white face
 
             faces[5, :, :] = np.rot90(faces[5, :, :])
-            temp1 = faces[2, :, 0].copy()
+            temp1 = faces[2, 2, :].copy()
             temp2 = np.flip(faces[1, 2, :]).copy()
             faces[1, 2, :] = temp1
-            temp1 = faces[0, :, 2].copy()
-            faces[0, :, 2] = temp2
-            temp2 = np.flip(faces[3, 0, :]).copy()
-            faces[3, 0, :] = temp1
-            faces[2, :, 0] = temp2
+            temp1 = faces[0, 2, :].copy()
+            faces[0, 2, :] = temp2
+            temp2 = np.flip(faces[3, 2, :]).copy()
+            faces[3, 2, :] = temp1
+            faces[2, 2, :] = temp2
 
     # for CW rotations, need to flip whenever moving the left side
     # of one 3x3 array to the top of another, or when moving
@@ -171,12 +205,12 @@ def simulate_move(node, move):
         if face == Faces.RED:
             faces[0, :, :] = np.rot90(faces[0, :, :], 3)
             temp1 = np.flip(faces[3, :, 2]).copy()
-            temp2 = faces[4, 2, :].copy()
-            faces[4, 2, :] = temp1
+            temp2 = faces[4, :, 0].copy()
+            faces[4, :, 0] = temp1
             temp1 = np.flip(faces[1, :, 0]).copy()
             faces[1, :, 0] = temp2
-            temp2 = faces[5, 0, :].copy()
-            faces[5, 0, :] = temp1
+            temp2 = faces[5, :, 0].copy()
+            faces[5, :, 0] = temp1
             faces[3, :, 2] = temp2
 
         elif face == Faces.GREEN:
@@ -193,76 +227,85 @@ def simulate_move(node, move):
         elif face == Faces.ORANGE:
             faces[2, :, :] = np.rot90(faces[2, :, :], 3)
             temp1 = np.flip(faces[1, :, 2]).copy()
-            temp2 = faces[4, 2, :].copy()
-            faces[4, 2, :] = temp1
+            temp2 = faces[4, :, 2].copy()
+            faces[4, :, 2] = temp1
             temp1 = np.flip(faces[3, :, 0]).copy()
             faces[3, :, 0] = temp2
-            temp2 = faces[5, 0, :].copy()
-            faces[5, 0, :] = temp1
+            temp2 = faces[5, :, 2].copy()
+            faces[5, :, 2] = temp1
             faces[1, :, 2] = temp2
 
         elif face == Faces.BLUE:
             faces[3, :, :] = np.rot90(faces[3, :, :], 3)
             temp1 = np.flip(faces[2, :, 2]).copy()
-            temp2 = faces[4, 2, :].copy()
-            faces[4, 2, :] = temp1
+            temp2 = faces[4, 0, :].copy()
+            faces[4, 0, :] = temp1
             temp1 = np.flip(faces[0, :, 0]).copy()
             faces[0, :, 0] = temp2
-            temp2 = faces[5, 0, :].copy()
-            faces[5, 0, :] = temp1
+            temp2 = faces[5, 2, :].copy()
+            faces[5, 2, :] = temp1
             faces[2, :, 2] = temp2
 
         elif face == Faces.YELLOW:
             faces[4, :, :] = np.rot90(faces[4, :, :], 3)
-            temp1 = np.flip(faces[0, :, 2]).copy()
-            temp2 = faces[3, 2, :].copy()
-            faces[3, 2, :] = temp1
-            temp1 = np.flip(faces[2, :, 0]).copy()
-            faces[2, :, 0] = temp2
+            temp1 = np.flip(faces[0, 0, :]).copy()
+            temp2 = faces[3, 0, :].copy()
+            faces[3, 0, :] = temp1
+            temp1 = np.flip(faces[2, 0, :]).copy()
+            faces[2, 0, :] = temp2
             temp2 = faces[1, 0, :].copy()
             faces[1, 0, :] = temp1
-            faces[0, :, 2] = temp2
+            faces[0, 0, :] = temp2
 
         elif face == Faces.WHITE:
             faces[5, :, :] = np.rot90(faces[5, :, :], 3)
-            temp1 = np.flip(faces[0, :, 2]).copy()
+            temp1 = np.flip(faces[0, 2, :]).copy()
             temp2 = faces[1, 2, :].copy()
             faces[1, 2, :] = temp1
-            temp1 = np.flip(faces[2, :, 0]).copy()
-            faces[2, :, 0] = temp2
-            temp2 = faces[3, 0, :].copy()
-            faces[3, 0, :] = temp1
-            faces[0, :, 2] = temp2
+            temp1 = np.flip(faces[2, 2, :]).copy()
+            faces[2, 2, :] = temp2
+            temp2 = faces[3, 2, :].copy()
+            faces[3, 2, :] = temp1
+            faces[0, 2, :] = temp2
     return Node(faces, move, parent=node)
 
 
 def reverse(action):
+    """
+    Reverse the action provided
+    :param action: a tuple of the face and direction
+    :return: a tuple with the same face and the opposite direction
+    """
     if action is not None:
-        direction = (action[1] + 1) % 2  # Toggle between CW and CCW
-        action = (action[0], direction)
+        direction = Direction.CW if action[1] is Direction.CCW else Direction.CCW  # Toggle between CW and CCW
+        action = (action[0], direction)  # tuples are immutable, must create a new one.
     return action
 
 
 class SolutionProvider:
 
-    def __init__(self, cube):
+    def __init__(self, current_cube):
         """
         Initialize the Solution Provider class
-        :param cube: This is a reference to the cube object that will be used to receive moves and get the state
+        :param current_cube: This is a reference to the cube object that will be used to receive moves and get the state
         """
-        self.cube = cube
+        self.cube = current_cube
+        self.cube.add_observer(self)
         self.observers = []
         self.moves = []
         self.moves_taken = 0
 
-        self.actions = []
-
         self.finished_state = np.zeros((6, 3, 3), dtype=int)
         for face in Faces:
             self.finished_state[face, :, :] = face
+
+        self.actions = []
         for face in Faces:
             for direction in Direction:
                 self.actions.append((face, direction))
+
+    def __del__(self):
+        self.cube.remove_observer(self)
 
     def add_observer(self, observer):
         """
@@ -309,13 +352,15 @@ class SolutionProvider:
                 new_from_start = simulate_move(current_start, action)
                 if new_from_start in end_explored:
                     other_side = end_explored[end_explored.index(new_from_start)]
-                    return path(new_from_start, other_side)
+                    self.moves = path(new_from_start, other_side)
+                    return
                 elif new_from_start not in start_explored and new_from_start not in start_frontier:
                     start_frontier.append(new_from_start)
                 new_from_end = simulate_move(current_end, action)
                 if new_from_end in start_explored:
                     other_side = start_explored[start_explored.index(new_from_end)]
-                    return path(other_side, new_from_end)
+                    self.moves = path(other_side, new_from_end)
+                    return
                 elif new_from_end not in end_explored and new_from_end not in end_frontier:
                     end_frontier.append(new_from_end)
 
@@ -325,7 +370,7 @@ class SolutionProvider:
         :return: void
         """
         for observer in self.observers:
-            observer.update(self.moves_taken)
+            observer.update_hints(self.moves_taken)
 
     def update(self, move):
         """
@@ -334,15 +379,19 @@ class SolutionProvider:
         :param move: The move that has been mode
         :return: void
         """
-        if move == self.moves[self.moves_taken]:
-            self.moves_taken += 1
-        elif move == self.moves[self.moves_taken - 1]:  # We can retrace our steps backwards to re-watch a series of
-            # moves
-            self.moves_taken -= 1
-        else:  # If we take a move that wasn't in-line with the provider, we are off-track and will stop providing hints
-            self.moves = []
-            self.moves_taken = 0
-        self.notify()
+        if len(self.moves) > 0:
+            if move == self.moves[self.moves_taken]:
+                self.moves_taken += 1
+            elif move == self.moves[self.moves_taken - 1]:  # We can retrace our steps backwards to re-watch a series of
+                # moves
+                self.moves_taken -= 1
+            else:  # If we take a move that wasn't in-line with the provider, we are off-track and will stop providing hints
+                self.moves = []
+                self.moves_taken = 0
+            if self.moves_taken >= len(self.moves):
+                self.moves = []
+                self.moves_taken = 0
+            self.notify()
 
     def get_state(self):
         """
