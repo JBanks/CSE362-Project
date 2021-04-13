@@ -3,10 +3,11 @@ import random
 import math
 import numpy
 from constants import *
+from display import Display
+
 
 
 class Cube:
-
     def __init__(self):
         self.moves = 0
         self.time = 0
@@ -17,7 +18,7 @@ class Cube:
         self.n = 2 # pocket cube TODO change the initialization of n so the user choses
         self.gap = 0.2
 
-        # self.display = Display()
+        self.display = Display()
         self.set_cube(3)#TODO just for test
 
     def print_faces(self):
@@ -283,4 +284,6 @@ class Cube:
                     self.faces[colors,r,c] = i
             i+=1
         # self.display.update_move(self.faces)
-        # self.display.display(self.faces)
+        self.display.display(self.faces)
+
+
