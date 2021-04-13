@@ -1,16 +1,19 @@
+import pygame
 import tkinter as tk
 from cube import Cube
 from solution_provider import SolutionProvider
 from record_keeper import RecordKeeper
 from constants import *
+import os
 
 
 class GameController:
 
     def __init__(self, view, cube):
         """
-        Initialize an instance of the Game class
-
+        Initialize an instance of the GameController
+        :param view: A game view instance
+        :param cube: a cube instance
         """
         self.view = view
         self.cube = cube
@@ -21,16 +24,25 @@ class GameController:
         self.control_state = ControlStates.WHOLE
 
     def update_ui(self):
+        """
+        Generate the contents of the user interface
+        :return: void
+        """
         self.view.show_start_screen()
 
     def get_hints(self):
+        """
+        Call the solution provider to retrieve a list of hints
+        :return: void
+        """
         self.solution_provider.get_optimum()
+        self.view.show_hints_list()
 
     def keypress(self, key):
         """
         When a user presses a key on the keyboard, determine which action should be taken
-        :param key:
-        :return:
+        :param key: the key pressed by the user
+        :return: void
         """
         # TODO: Make sure these function calls are correct.
         translate = {'z': 1, 'x': 2, 'c': 3, 'a': 4, 's': 5, 'd': 6, 'q': 7, 'w': 8, 'e': 9}
@@ -56,7 +68,7 @@ class GameController:
         This will take a click from the user and pass it to the appropriate handler.
         :param x: the x coordinate where the user has clicked
         :param y: the y coordinate where the user has clicked
-        :return:
+        :return: void
         """
         print(f"click({x}, {y})")
 
@@ -78,7 +90,10 @@ class GameController:
         :param move: the move that was made on the cube
         :return: void
         """
-        print(f"update({move})")
+        self.view.show_hints_list()
+
+    def update_hints(self, moves_taken):
+        self.view.show_hints_list()
 
     def get_movement(self, key):
         """
@@ -184,7 +199,7 @@ class GameController:
 
     def start_game(self):
         """
-
+        This function will initiate a game
         :return:
         """
         self.view.show_play_screen()
@@ -206,21 +221,31 @@ class GameController:
 
     def set_cube(self, n):
         """
-
+        Defines the dimensions of the rubik's cube
         :param n: an integer representing the square root of the number of tiles on each side
         :return: void
         """
         print(f"set_cube({n})")
+        self.cube.set_cube(n)
+
+    def clear_scores(self):
+        """
+        Empty the high score chart to start fresh
+        :return: void
+        """
+        self.record_keeper.clear()
 
 
 class GameView(tk.Frame):
 
     def __init__(self, master, cube, **kw):
         super().__init__(master, **kw)
+        self.master = master
         self.grid()
         self.window_width = 800
         self.window_height = 800
         self.submenu_items = []
+        self.hints_items = []
         self.canvas = tk.Canvas(self, width=self.window_width, height=self.window_height, borderwidth=0,
                                 highlightthickness=0)
         self.canvas.grid()
@@ -304,8 +329,52 @@ class GameView(tk.Frame):
         for widget in select_button:
             self.submenu_items.append(widget)
 
+    def pygame_update(self):
+        pygame.display.update()
+        self.master.after(1000, self.pygame_update)
+
+    def show_hints_list(self):
+        self.clear_hints_list()
+        hints_state = self.controller.solution_provider.get_state()
+        if len(hints_state[0]) > 0:
+            width = 200
+            height = 400
+            top = WINDOW_HEIGHT - height - BUTTON_SIZE[1] - 2*BUTTON_MARGIN[1]
+            left = WINDOW_WIDTH - width
+            bottom = WINDOW_HEIGHT - BUTTON_SIZE[1] - 2*BUTTON_MARGIN[1]
+            right = WINDOW_WIDTH
+            hints_panel = self.canvas.create_rectangle(left, top, right, bottom, SUBMENU_STYLE)
+            self.hints_items.append(hints_panel)
+            hints = ""
+            face_strings = ["Red", "Green", "Orange", "Blue", "Yellow", "White"]
+            direction_strings = ["Clockwise", "Counter Clockwise"]
+            for hint in hints_state[0]:
+                hints += f"{face_strings[hint[0]]}: {direction_strings[hint[1]]}\n"
+            top += 20
+            left += 20
+            label = self.canvas.create_text(left, top, text=hints, anchor="nw")
+            self.hints_items.append(label)
+            top = top + hints_state[1] * 16
+            # print(f"indicator placed at position: {hints_state[1]}")
+            left -= 20
+            indicator = self.canvas.create_rectangle(left, top, left + 10, top + 10, BUTTON_STYLE)
+            self.hints_items.append(indicator)
+
+    def clear_hints_list(self):
+        for item in self.hints_items:
+            self.canvas.delete(item)
+
     def show_play_screen(self):
         self.canvas.delete(tk.ALL)
+        self.cube_frame = tk.Frame(self.canvas, width=500, height=500)
+        os.environ['SDL_WINDOWID'] = str(self.cube_frame.winfo_id())
+        os.environ['SDL_VIDEODRIVER'] = 'windib'
+
+        screen = pygame.display.set_mode((500, 500))
+        screen.fill(pygame.Color(255, 255, 255))
+
+        self.pygame_update()
+
         self.create_button('Save', lambda event: self.show_start_screen(),
                            location=(BUTTON_MARGIN[0],
                                      WINDOW_HEIGHT - BUTTON_SIZE[1] - BUTTON_MARGIN[1]))
