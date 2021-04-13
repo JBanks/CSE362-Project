@@ -17,9 +17,34 @@ class Cube:
         self.cube_size = 2
         self.n = 2 # pocket cube TODO change the initialization of n so the user choses
         self.gap = 0.2
+        self.observers = []  # A list for the observer pattern
 
-        self.display = Display()
+        # self.display = Display()
         self.set_cube(3)#TODO just for test
+
+    def add_observer(self, observer):
+        """
+        This adds an observer to the list of observers who will be notified when changes occur
+        :param observer: must be an object that accepts calls to "update" with a "move" parameter
+        :return: void
+        """
+        self.observers.append(observer)
+
+    def remove_observer(self, observer):
+        """
+        This removes an observer so that they will no longer be notified when changes occur
+        :param observer: must be an object that is already in the observers list
+        :return: void
+        """
+        self.observers.remove(observer)
+
+    def notify(self, move):
+        """
+        This function is called to notify any listeners that the list of moves has been updated.
+        :return: void
+        """
+        for observer in self.observers:
+            observer.update(move)
 
     def print_faces(self):
         print(self.faces)
@@ -202,6 +227,7 @@ class Cube:
                 self.faces[0, 2, :] = temp2.copy()
 
         self.moves += 1
+        self.notify((face, direction))
 
     def solved(self):
         """
@@ -242,15 +268,6 @@ class Cube:
         else:
             self.theta += delta_angle
 
-    def notify(self):
-        """
-
-        :param
-        :param
-        :return:
-        """
-        pass
-
     def get_state(self):
         """
 
@@ -284,6 +301,6 @@ class Cube:
                     self.faces[colors,r,c] = i
             i+=1
         # self.display.update_move(self.faces)
-        self.display.display(self.faces)
+        # self.display.display(self.faces)
 
 
