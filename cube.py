@@ -38,6 +38,7 @@ class Cube:
         self.gap = 0.2
         self.faces = None
         self.observers = []  # A list for the observer pattern
+        self.copy_faces = None
 
         # self.display = Display()
         self.set_cube(3)  # TODO just for test
@@ -148,11 +149,10 @@ class Cube:
         """
         This method returns the cube to the state it was in prior to
         the last move
-        :param
-        :param
         :return: void
         """
-        pass
+        # set faces equal to what it was prior to the last move
+        self.faces = self.copy_faces.copy()
 
     def set_cube(self, n):
         """
@@ -183,6 +183,11 @@ class Cube:
         if faces is None:
             simulation = False
             faces = self.faces
+
+        # save the state of the cube before a move is made so it
+        # can be returned to via the undo button
+
+        self.copy_faces = faces.copy()
 
         # top: arr[x,0,:]
         # bottom: arr[x,2,:]
