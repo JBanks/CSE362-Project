@@ -45,8 +45,24 @@ class Cube:
         for observer in self.observers:
             observer.update(move)
 
-    def print_faces(self):
-        print(self.faces)
+    def print_faces(self, faces=None):
+        if faces is None:
+            faces = self.faces
+        for i in range(faces.shape[2]):
+            print(f"{' '*12}", end="")
+            for tile in faces[4, i, :]:
+                print(f"{tile:4d}", end="")
+            print()
+        for i in range(faces.shape[2]):
+            for tile in faces[0:4, i, :].flatten():
+                print(f"{tile:4d}", end="")
+            print()
+        for i in range(faces.shape[2]):
+            print(f"{' '*12}", end="")
+            for tile in faces[5, i, :]:
+                print(f"{tile:4d}", end="")
+            print()
+        print()
 
     def solved(self):
         """
@@ -149,7 +165,7 @@ class Cube:
                 faces[0, :, :] = numpy.rot90(faces[0, :, :])
                 faces[4, :, 0], faces[3, :, 2], faces[5, :, 0], faces[1, :, 0] = \
                     faces[1, :, 0].copy(), numpy.flip(faces[4, :, 0]).copy(), \
-                    faces[3, :, 2].copy(), numpy.flip(faces[5, :, 0]).copy()
+                    numpy.flip(faces[3, :, 2]).copy(), faces[5, :, 0].copy()
 
             elif face == Faces.GREEN:  # green face
                 faces[1, :, :] = numpy.rot90(faces[1, :, :])
@@ -160,26 +176,26 @@ class Cube:
             elif face == Faces.ORANGE:  # orange face
                 faces[2, :, :] = numpy.rot90(faces[2, :, :])
                 faces[4, :, 2], faces[1, :, 2], faces[5, :, 2], faces[3, :, 0] = \
-                    faces[3, :, 0].copy(), numpy.flip(faces[4, :, 2]).copy(), \
+                    numpy.flip(faces[3, :, 0]).copy(), faces[4, :, 2].copy(), \
                     faces[1, :, 2].copy(), numpy.flip(faces[5, :, 2]).copy()
 
             elif face == Faces.BLUE:  # blue face
                 faces[3, :, :] = numpy.rot90(faces[3, :, :])
                 faces[4, 0, :], faces[2, :, 2], faces[5, 2, :], faces[0, :, 0] = \
-                    faces[0, :, 0].copy(), numpy.flip(faces[4, 0, :]).copy(), \
-                    faces[2, :, 2].copy(), numpy.flip(faces[5, 2, :]).copy()
+                    numpy.flip(faces[0, :, 0]).copy(), faces[4, 0, :].copy(), \
+                    numpy.flip(faces[2, :, 2]).copy(), faces[5, 2, :].copy()
 
             elif face == Faces.YELLOW:  # yellow face
                 faces[4, :, :] = numpy.rot90(faces[4, :, :])
                 faces[3, 0, :], faces[0, 0, :], faces[1, 0, :], faces[2, 0, :] = \
-                    faces[2, 0, :].copy(), numpy.flip(faces[3, 0, :]).copy(), \
-                    faces[0, 0, :].copy(), numpy.flip(faces[1, 0, :]).copy()
+                    faces[2, 0, :].copy(), faces[3, 0, :].copy(), \
+                    faces[0, 0, :].copy(), faces[1, 0, :].copy()
 
             elif face == Faces.WHITE:  # white face
                 faces[5, :, :] = numpy.rot90(faces[5, :, :])
                 faces[1, 2, :], faces[0, 2, :], faces[3, 2, :], faces[2, 2, :] = \
-                    faces[2, 2, :].copy(), numpy.flip(faces[1, 2, :]).copy(), \
-                    faces[0, 2, :].copy(), numpy.flip(faces[3, 2, :]).copy()
+                    faces[2, 2, :].copy(), faces[1, 2, :].copy(), \
+                    faces[0, 2, :].copy(), faces[3, 2, :].copy()
 
         # for CW rotations, need to flip whenever moving the left side
         # of one 3x3 array to the top of another, or when moving
@@ -197,7 +213,7 @@ class Cube:
                 faces[0, :, :] = numpy.rot90(faces[0, :, :], 3)
                 faces[4, :, 0], faces[1, :, 0], faces[5, :, 0], faces[3, :, 2] = \
                     numpy.flip(faces[3, :, 2]).copy(), faces[4, :, 0].copy(), \
-                    numpy.flip(faces[1, :, 0]).copy(), faces[5, :, 0].copy()
+                    faces[1, :, 0].copy(), numpy.flip(faces[5, :, 0]).copy()
 
             elif face == Faces.GREEN:
                 faces[1, :, :] = numpy.rot90(faces[1, :, :], 3)
@@ -208,26 +224,26 @@ class Cube:
             elif face == Faces.ORANGE:
                 faces[2, :, :] = numpy.rot90(faces[2, :, :], 3)
                 faces[4, :, 2], faces[3, :, 0], faces[5, :, 2], faces[1, :, 2] = \
-                    numpy.flip(faces[1, :, 2]).copy(), faces[4, :, 2].copy(), \
+                    faces[1, :, 2].copy(), numpy.flip(faces[4, :, 2]).copy(), \
                     numpy.flip(faces[3, :, 0]).copy(), faces[5, :, 2].copy()
 
             elif face == Faces.BLUE:
                 faces[3, :, :] = numpy.rot90(faces[3, :, :], 3)
                 faces[4, 0, :], faces[0, :, 0], faces[5, 2, :], faces[2, :, 2] = \
-                    numpy.flip(faces[2, :, 2]).copy(), faces[4, 0, :].copy(), \
-                    numpy.flip(faces[0, :, 0]).copy(), faces[5, 2, :].copy()
+                    faces[2, :, 2].copy(), numpy.flip(faces[4, 0, :]).copy(), \
+                    faces[0, :, 0].copy(), numpy.flip(faces[5, 2, :]).copy()
 
             elif face == Faces.YELLOW:
                 faces[4, :, :] = numpy.rot90(faces[4, :, :], 3)
                 faces[3, 0, :], faces[2, 0, :], faces[1, 0, :], faces[0, 0, :] = \
-                    numpy.flip(faces[0, 0, :]).copy(), faces[3, 0, :].copy(), \
-                    numpy.flip(faces[2, 0, :]).copy(), faces[1, 0, :].copy()
+                    faces[0, 0, :].copy(), faces[3, 0, :].copy(), \
+                    faces[2, 0, :].copy(), faces[1, 0, :].copy()
 
             elif face == Faces.WHITE:
                 faces[5, :, :] = numpy.rot90(faces[5, :, :], 3)
                 faces[1, 2, :], faces[2, 2, :], faces[3, 2, :], faces[0, 2, :] = \
-                    numpy.flip(faces[0, 2, :]).copy(), faces[1, 2, :].copy(), \
-                    numpy.flip(faces[2, 2, :]).copy(), faces[3, 2, :].copy()
+                    faces[0, 2, :].copy(), faces[1, 2, :].copy(), \
+                    faces[2, 2, :].copy(), faces[3, 2, :].copy()
 
         if not simulation:  # We are operating on the actual cube and need to act appropriately
             self.moves += 1
