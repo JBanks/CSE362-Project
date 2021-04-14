@@ -225,7 +225,7 @@ class GameController:
         :param n: an integer representing the square root of the number of tiles on each side
         :return: void
         """
-        print(f"set_cube({n})")
+        print(f"set_cube({n})") # this one should call the cube's function
         self.cube.set_cube(n)
 
     def clear_scores(self):

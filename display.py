@@ -157,9 +157,6 @@ class Display:
         glTranslatef(-x_to_translate, y_to_translate, -z_to_translate)
         color = RGB.rgb.get(self.faces[4][j][i])
         glColor(color)
-        if j == 0:
-            glColor(1,1,1)
-
         glBegin(GL_QUADS)
         glVertex3f(-self.cube_size / 2, self.cube_size / 2, -self.cube_size / 2)
         glVertex3f(self.cube_size / 2, self.cube_size / 2, -self.cube_size / 2)
