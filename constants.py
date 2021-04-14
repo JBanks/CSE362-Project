@@ -1,4 +1,5 @@
 from enum import IntEnum, auto
+import math
 
 WINDOW_WIDTH = 800
 WINDOW_HEIGHT = 800
@@ -12,6 +13,21 @@ BUTTON_STYLE = {'fill': '#090', 'outline': '#090'}
 BUTTON_TEXT_STYLE = {'fill': '#fff'}
 
 SUBMENU_STYLE = {'fill': '#9F9', 'outline': '#090'}
+DEBUG = True
+
+ANGLE_CHANGE = math.pi/4
+
+
+def debug(string, **kw):
+    if DEBUG:
+        print(string, kw)
+
+
+class Axis(IntEnum):
+    HORIZONTAL = 0
+    VERTICAL = auto()
+    HORIZ = HORIZONTAL
+    VERT = VERTICAL
 
 
 class ControlStates(IntEnum):

@@ -3,7 +3,27 @@ import random
 import math
 import numpy
 from constants import *
-from display import Display
+
+
+def sym_floor(val):
+    if val > 0:
+        return math.floor(val)
+    else:
+        return math.ceil(val)
+
+
+def sym_ceil(val):
+    if val > 0:
+        return math.ceil(val)
+    else:
+        return math.floor(val)
+
+
+def sym_sub(val, diff):
+    if val > 0:
+        return val - diff
+    else:
+        return val + diff
 
 
 class Cube:
@@ -16,6 +36,7 @@ class Cube:
         self.cube_size = 2
         self.n = 2  # pocket cube TODO change the initialization of n so the user choses
         self.gap = 0.2
+        self.faces = None
         self.observers = []  # A list for the observer pattern
 
         # self.display = Display()
@@ -46,6 +67,11 @@ class Cube:
             observer.update(move)
 
     def print_faces(self, faces=None):
+        """
+        Print the cube tiles to stdout
+        :param faces: An optional parameter to specify which faces to print (must have shape (6, 3, 3)
+        :return: void
+        """
         if faces is None:
             faces = self.faces
         for i in range(faces.shape[2]):
@@ -90,7 +116,7 @@ class Cube:
             direction_index = random.randint(0, 1)
             self.move(face_index, direction_index)
 
-    def update_angle(self, delta_angle, axis):
+    def update_angle(self, axis, delta_angle):
         """
         This method will update the angle of the cube to be displayed
         when it is rotated
@@ -98,10 +124,16 @@ class Cube:
         :param axis: 0 (horizontal) or 1 (vertical)
         :return: void
         """
-        if axis == 0:
-            self.phi += delta_angle
+        if axis == Axis.VERT:
+            if delta_angle > 0 and self.phi > math.pi / 2:
+                pass
+            elif delta_angle < 0 and self.phi < -math.pi / 2:
+                pass
+            else:
+                self.phi += delta_angle
         else:
             self.theta += delta_angle
+            debug(f"position: {sym_ceil(sym_floor(sym_sub(self.theta * 8 / math.pi, 1))/4)}")
 
     def get_state(self):
         """
@@ -160,7 +192,29 @@ class Cube:
         # of one 3x3 array to the right side of another, or when moving
         # the top of one to the left side of another
 
+        """
+        np.rot90(faces[face, :, :], 3 if direction == Direction.CW else 1)
+        if face < 4:
+            left = faces[face - 1 % 4, :, 2]
+            right = faces[face + 1 % 4, :, 0]
+            top = 
+            bottom = 
+        else:
+            left = faces[Faces.RED, :, 0 if face == Faces.YELLOW else 2]
+            right = faces[Faces.ORANGE, :, 0 if face == Faces.YELLOW else 2]
+            top = faces[Faces.BLUE, :, 0 if face == Faces.YELLOW else 2]
+            bottom = faces[Faces.GREEN, :, 0 if face == Faces.YELLOW else 2]
+        CW -> top, right, bottom, left = left, top, bottom, right 
+        CCW -> top, right, bottom, left = right, bottom, left, top
+        
+        ... = left
+        ... = top
+        ... = right
+        ... = bottom
+        """
+
         if direction == Direction.CCW:  # CCW 90 degree rotation
+
             if face == Faces.RED:  # red face
                 faces[0, :, :] = numpy.rot90(faces[0, :, :])
                 faces[4, :, 0], faces[3, :, 2], faces[5, :, 0], faces[1, :, 0] = \
@@ -250,3 +304,21 @@ class Cube:
             self.notify((face, direction))
 
         return faces
+
+    def get_faces(self):
+        position = sym_ceil(sym_sub(self.theta * 8 / math.pi, 1)/4)
+        left = position - 1 % 4
+        right = position + 1 % 4
+        if math.pi/8 >= self.phi >= -math.pi/8:
+            top = Faces.YELLOW
+            bottom = Faces.WHITE
+            active = position
+        elif math.pi/8 <= self.phi:
+            active = Faces.YELLOW
+            bottom = position
+            top = position + 2 % 4
+        else:
+            active = Faces.WHITE
+            top = position
+            bottom = position + 2 % 4
+        return active, left, top, right, bottom

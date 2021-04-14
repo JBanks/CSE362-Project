@@ -46,15 +46,20 @@ class GameController:
         """
         # TODO: Make sure these function calls are correct.
         translate = {'z': 1, 'x': 2, 'c': 3, 'a': 4, 's': 5, 'd': 6, 'q': 7, 'w': 8, 'e': 9}
-        arrows = {37: (0, -45), 38: (1, 45), 39: (0, 45), 40: (1, 45)}
+        arrows = {37: (Axis.HORIZ, -ANGLE_CHANGE),
+                  38: (Axis.VERT, ANGLE_CHANGE),
+                  39: (Axis.HORIZ, ANGLE_CHANGE),
+                  40: (Axis.VERT, -ANGLE_CHANGE)}
         try:
             key_val = int(key.char)
         except:
             try:
                 key_val = translate[key.char]
             except:
-                self.cube.update_angle(*arrows[key.keycode])
-                print(f"invalid keypress: {key}")
+                try:
+                    self.cube.update_angle(*arrows[key.keycode])
+                except:
+                    print(f"invalid keypress: {key}")
                 return
         if (key_val - 1) % 2 == 0:
             self.control_state_update(key_val)
@@ -103,11 +108,8 @@ class GameController:
         :return: The face and direction of the move to be made.
         """
         # TODO: Determine which faces are in the positions specified
-        active = Faces.GREEN
-        top = Faces.YELLOW
-        left = Faces.RED
-        right = Faces.ORANGE
-        bottom = Faces.WHITE
+
+        active, left, top, right, bottom = self.cube.get_faces()
 
         movements = {ControlStates.CENTER: {4: (active, Direction.CCW),
                                             6: (active, Direction.CW),
@@ -129,7 +131,7 @@ class GameController:
                                                   6: (bottom, Direction.CW),
                                                   2: (right, Direction.CCW),
                                                   8: (right, Direction.CW)}}
-        print(f"sending movement control: {movements[self.control_state][key]}")
+        debug(f"sending movement control: {movements[self.control_state][key]}")
         return movements[self.control_state][key]
 
     def get_rotation(self, key):
