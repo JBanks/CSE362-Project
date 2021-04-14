@@ -368,7 +368,7 @@ class GameView(tk.Frame):
         self.canvas.delete(tk.ALL)
         self.cube_frame = tk.Frame(self.canvas, width=500, height=500)
         os.environ['SDL_WINDOWID'] = str(self.cube_frame.winfo_id())
-        os.environ['SDL_VIDEODRIVER'] = 'windib'
+        os.environ['SDL_VIDEODRIVER'] = 'dummy'
 
         screen = pygame.display.set_mode((500, 500))
         screen.fill(pygame.Color(255, 255, 255))
