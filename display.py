@@ -54,7 +54,6 @@ class Display:
 
         pass
     def set_for_display(self,i,j):
-
         glPushMatrix()
         x = j
         y = i
@@ -67,7 +66,7 @@ class Display:
         glRotate(self.xrot,1,0,0)
         glRotate(self.yrot,0,1,0)
         glTranslatef((x - 1) * self.cube_size + x * self.gap, (-y + 1) * self.cube_size - y * self.gap, (z - 1) * self.cube_size + z * self.gap - self.gap)
-        color = RGB.rgb.get(self.faces[0][i][j])
+        color = RGB.rgb.get(self.faces[0][i][j])#-j + self.n-1
         glColor(color)
         glBegin(GL_QUADS)
         glVertex3f(-self.cube_size / 2, self.cube_size / 2, self.cube_size / 2)
@@ -90,7 +89,7 @@ class Display:
         glRotate(self.yrot, 0, 1, 0)
         glTranslatef((x - 1) * self.cube_size + x * self.gap, (-y + 1) * self.cube_size - y * self.gap, -((z - 1) * self.cube_size + z * self.gap - self.gap))
         # glTranslatef(0,0,-(self.n-1+self.gap*2) * 2) #x2 because i have to bring it to the center from the previous translate and then the same size
-        color = RGB.rgb.get(self.faces[2][i][-j + self.n-1])
+        color = RGB.rgb.get(self.faces[2][i][j])
         glColor(color)
         glBegin(GL_QUADS)
         glVertex3f(self.cube_size / 2, self.cube_size / 2, -self.cube_size / 2)
@@ -132,7 +131,7 @@ class Display:
         glRotate(self.yrot, 0, 1, 0)
         x_to_translate = (self.n - 1) * self.cube_size +  - self.cube_size
         glTranslatef(-x_to_translate, (-y + 1) * self.cube_size - y * self.gap, z_to_translate)
-        color = RGB.rgb.get(self.faces[3][i][-j + self.n-1])
+        color = RGB.rgb.get(self.faces[3][i][j])#-j + self.n-1
         glColor(color)
         glBegin(GL_QUADS)
 
@@ -158,7 +157,7 @@ class Display:
         z_to_translate = (y - 1) * self.cube_size + y * self.gap - self.gap
 
         glTranslatef(-x_to_translate, y_to_translate, -z_to_translate)
-        color = RGB.rgb.get(self.faces[4][j][i])
+        color = RGB.rgb.get(self.faces[4][i][j])
         glColor(color)
         glBegin(GL_QUADS)
         glVertex3f(-self.cube_size / 2, self.cube_size / 2, -self.cube_size / 2)
@@ -185,7 +184,7 @@ class Display:
         # glTranslatef((x - 1) * self.cube_size + x * self.gap, (-y + 1) * self.cube_size - y * self.gap, (z - 1) * self.cube_size + z * self.gap)
         y_to_translate =  (self.n - 1) * self.cube_size - self.cube_size + self.gap*2
         glTranslatef(-x_to_translate, -y_to_translate, -z_to_translate)
-        color = RGB.rgb.get(self.faces[5][-j + self.n-1][i])
+        color = RGB.rgb.get(self.faces[5][i][j])#-j + self.n-1
         glColor(color)
         glBegin(GL_QUADS)
 
@@ -211,7 +210,7 @@ class Display:
         self.faces, phi, theta = self.cube.get_state()
         self.phi = phi
         self.theta = theta
-        print(self.phi,self.theta)
+        print(self.faces)
 
     def redisplay(self):
         glViewport(0, 0, self.w, self.h)
