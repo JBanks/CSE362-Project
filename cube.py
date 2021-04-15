@@ -132,7 +132,7 @@ class Cube:
                 self.phi += delta_angle
         else:
             self.theta += delta_angle
-
+        self.notify(None)
 
     def get_state(self):
         """
@@ -325,4 +325,4 @@ class Cube:
             active = Faces.WHITE
             top = position
             bottom = position + 2 % 4
-        return Faces(active), Faces(left), Faces(top), Faces(right), Faces(bottom)
+        return active, left, top, right, bottom

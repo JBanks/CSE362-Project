@@ -19,8 +19,8 @@ class GameController:
         self.view = view
         self.cube = cube
         self.display = Display(self.cube)
-        self.solution_provider = SolutionProvider(self.cube)
-        self.solution_provider.add_observer(self)
+        # self.solution_provider = SolutionProvider(self.cube)
+        # self.solution_provider.add_observer(self)
         self.cube.add_observer(self.display)
         self.record_keeper = RecordKeeper()
         self.dimensions = 3
@@ -374,7 +374,7 @@ class GameView(tk.Frame):
 
         screen = pygame.display.set_mode((500, 500), pygame.DOUBLEBUF | pygame.OPENGL)
         screen.fill(pygame.Color(255, 255, 255))
-        pygame.display.init()
+        pygame.init()
         self.pygame_update()
 
         self.create_button('Save', lambda event: self.show_start_screen(),

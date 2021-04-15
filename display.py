@@ -26,6 +26,9 @@ class Display:
         gluPerspective(45, (self.w / self.h), 0.1, 50.0)
         # glTranslatef(-1.5, -2.0, -10)
         glEnable(GL_DEPTH_TEST)
+        self.faces, self.phi, self.theta = self.cube.get_state()
+        self.n = len(self.faces[0])
+
 
     def display(self):
         """
@@ -35,17 +38,13 @@ class Display:
                 :return: void
                 """
         self.init()
-
-        self.faces = self.cube.get_state()
-        self.n = len(self.faces[0])
+        self.xrot = (self.phi * 180) / math.pi
+        self.yrot = (self.theta * 180) / math.pi
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         glMatrixMode(GL_MODELVIEW)
-        #gluLookAt(10, 3, 0, 0, 0, 0, 0, 1, 0)
-        # glTranslatef(0.0, 0.0, -25.0 )
         for i in range(self.n):
             for j in range(self.n):
-                # for k in range(n):
                     self.set_for_display(i,j)
 
         glMatrixMode(GL_MODELVIEW)
@@ -55,9 +54,8 @@ class Display:
 
         pass
     def set_for_display(self,i,j):
-        #TODO rotations aren't good
-        glPushMatrix()
 
+        glPushMatrix()
         x = j
         y = i
         z = 2
@@ -204,32 +202,16 @@ class Display:
 
         glPopMatrix()
 
-    def rotate(self,rot,angle):
-        if angle == 'x':
-            self.yrot += rot
-        else :
-            self.xrot += rot
-
-    # def special_keys(self,key,x,y):
-    #     if key == GLUT_KEY_DOWN:
-    #         self.xrot += 5
-    #     elif key == GLUT_KEY_RIGHT:
-    #         self.yrot += 5
-    #     glutPostRedisplay()
-    # def keys(self, key, x,y):
-    #     if key == 27:
-    #         print("baby break a sweat, dont get tired yet")
-    #         pygame.quit()
-    #         quit()
-
     def update(self, move):
         """
                 This method is called after a move every time so it can update the displaying cube
                 :param move: is a tuple variable, it contains the face to rotate and the direction to rotate
                 :return: void
                 """
-        self.faces = self.cube.get_state()
-
+        self.faces, phi, theta = self.cube.get_state()
+        self.phi = phi
+        self.theta = theta
+        print(self.phi,self.theta)
 
     def redisplay(self):
         glViewport(0, 0, self.w, self.h)
