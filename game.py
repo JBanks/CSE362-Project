@@ -52,7 +52,11 @@ class GameController:
         arrows = {37: (Axis.HORIZ, -ANGLE_CHANGE),
                   38: (Axis.VERT, ANGLE_CHANGE),
                   39: (Axis.HORIZ, ANGLE_CHANGE),
-                  40: (Axis.VERT, -ANGLE_CHANGE)}
+                  40: (Axis.VERT, -ANGLE_CHANGE),
+                  8124162: (Axis.HORIZ, -ANGLE_CHANGE),
+                  8320768: (Axis.VERT, ANGLE_CHANGE),
+                  8189699: (Axis.HORIZ, ANGLE_CHANGE),
+                  8255233: (Axis.VERT, -ANGLE_CHANGE)}
         try:
             key_val = int(key.char)
         except ValueError:
