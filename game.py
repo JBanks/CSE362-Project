@@ -1,6 +1,7 @@
 import pygame
 import tkinter as tk
 from cube import Cube
+from display import Display
 from solution_provider import SolutionProvider
 from record_keeper import RecordKeeper
 from constants import *
@@ -17,8 +18,10 @@ class GameController:
         """
         self.view = view
         self.cube = cube
+        self.display = Display(self.cube)
         self.solution_provider = SolutionProvider(self.cube)
         self.solution_provider.add_observer(self)
+        self.cube.add_observer(self.display)
         self.record_keeper = RecordKeeper()
         self.dimensions = 3
         self.control_state = ControlStates.WHOLE
@@ -319,8 +322,11 @@ class GameView(tk.Frame):
             self.submenu_items.append(widget)
 
     def pygame_update(self):
-        pygame.display.update()
-        self.master.after(1000, self.pygame_update)
+
+        self.controller.display.display()
+        self.controller.display.redisplay()
+        pygame.display.flip()
+        self.master.after(0, self.pygame_update)
 
     def show_hints_list(self):
         self.clear_hints_list()
@@ -358,9 +364,9 @@ class GameView(tk.Frame):
         self.cube_frame = tk.Frame(self.canvas, width=500, height=500)
         os.environ['SDL_WINDOWID'] = str(self.cube_frame.winfo_id())
 
-        screen = pygame.display.set_mode((500, 500))
+        screen = pygame.display.set_mode((500, 500), pygame.DOUBLEBUF | pygame.OPENGL)
         screen.fill(pygame.Color(255, 255, 255))
-
+        pygame.display.init()
         self.pygame_update()
 
         self.create_button('Save', lambda event: self.show_start_screen(),
