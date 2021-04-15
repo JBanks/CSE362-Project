@@ -310,7 +310,7 @@ class Cube:
         return faces
 
     def get_faces(self):
-        position = sym_ceil(sym_sub(self.theta * 8 / math.pi, 1)/4) % 4
+        position = sym_ceil(sym_sub(self.theta * 8 / math.pi, 1)/4) + 2 % 4
         left = position - 1 % 4
         right = position + 1 % 4
         if math.pi/8 >= self.phi >= -math.pi/8:
