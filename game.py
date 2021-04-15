@@ -1,11 +1,9 @@
 import pygame
 import tkinter as tk
 from cube import Cube
-from display import Display
 from solution_provider import SolutionProvider
 from record_keeper import RecordKeeper
 from constants import *
-from pygame.locals import *
 import os
 
 
@@ -19,10 +17,8 @@ class GameController:
         """
         self.view = view
         self.cube = cube
-        self.display = Display(self.cube)
         self.solution_provider = SolutionProvider(self.cube)
         self.solution_provider.add_observer(self)
-        self.cube.add_observer(self.display)
         self.record_keeper = RecordKeeper()
         self.dimensions = 3
         self.control_state = ControlStates.WHOLE
@@ -48,17 +44,21 @@ class GameController:
         :param key: the key pressed by the user
         :return: void
         """
-        # TODO: Make sure these function calls are correct.
         translate = {'z': 1, 'x': 2, 'c': 3, 'a': 4, 's': 5, 'd': 6, 'q': 7, 'w': 8, 'e': 9}
-        arrows = {37: (0, -45), 38: (1, 45), 39: (0, 45), 40: (1, 45)}
+        arrows = {37: (Axis.HORIZ, -ANGLE_CHANGE),
+                  38: (Axis.VERT, ANGLE_CHANGE),
+                  39: (Axis.HORIZ, ANGLE_CHANGE),
+                  40: (Axis.VERT, -ANGLE_CHANGE)}
         try:
             key_val = int(key.char)
-        except:
+        except ValueError:
             try:
                 key_val = translate[key.char]
-            except:
-                self.cube.update_angle(*arrows[key.keycode])
-                print(f"invalid keypress: {key}")
+            except KeyError:
+                try:
+                    self.cube.update_angle(*arrows[key.keycode])
+                except KeyError:
+                    print(f"invalid keypress: {key}")
                 return
         if (key_val - 1) % 2 == 0:
             self.control_state_update(key_val)
@@ -67,6 +67,7 @@ class GameController:
         else:
             self.cube.move(*self.get_movement(key_val))
 
+    # noinspection PyMethodMayBeStatic
     def click(self, x, y):
         """
         This will take a click from the user and pass it to the appropriate handler.
@@ -76,6 +77,7 @@ class GameController:
         """
         print(f"click({x}, {y})")
 
+    # noinspection PyMethodMayBeStatic
     def drag(self, start_x, start_y, x, y):
         """
         If the user clicks and drags their mouse, determine what to do with the coordinates from the start and the end
@@ -88,30 +90,30 @@ class GameController:
         """
         print(f"drag({start_x}, {start_y}, {x}, {y})")
 
-    def update(self, move):
+    def update(self, *_):
         """
         Receives the move that was made and updates its internal cube representation
-        :param move: the move that was made on the cube
+        :param _: This parameter is unused, but included for templating purposes
         :return: void
         """
         self.view.show_hints_list()
 
-    def update_hints(self, moves_taken):
+    def update_hints(self, *_):
+        """
+        Hints list is ready to be updated
+        :param _: Parameter is unused.
+        :return: void
+        """
         self.view.show_hints_list()
 
     def get_movement(self, key):
         """
         Take the key press and determine which move is to be made on the cube.
-        TODO: finish face detection logic
         :param key: The key that was pressed.
         :return: The face and direction of the move to be made.
         """
-        # TODO: Determine which faces are in the positions specified
-        active = Faces.GREEN
-        top = Faces.YELLOW
-        left = Faces.RED
-        right = Faces.ORANGE
-        bottom = Faces.WHITE
+
+        active, left, top, right, bottom = self.cube.get_faces()
 
         movements = {ControlStates.CENTER: {4: (active, Direction.CCW),
                                             6: (active, Direction.CW),
@@ -133,9 +135,10 @@ class GameController:
                                                   6: (bottom, Direction.CW),
                                                   2: (right, Direction.CCW),
                                                   8: (right, Direction.CW)}}
-        print(f"sending movement control: {movements[self.control_state][key]}")
+        debug(f"sending movement control: {movements[self.control_state][key]}")
         return movements[self.control_state][key]
 
+    # noinspection PyMethodMayBeStatic
     def get_rotation(self, key):
         """
         Take the key press and determine which angle will be modified
@@ -148,7 +151,6 @@ class GameController:
     def control_state_update(self, key):
         """
         Change the current movement state
-        TODO: Perhaps we can have an indicator to show which state we're in
         :param key: the key that was pressed
         :return: void
         """
@@ -164,6 +166,7 @@ class GameController:
             self.control_state = control_states[key]
         print(f"Updating control_state from {old_control_state} to {self.control_state}")
 
+    # noinspection PyMethodMayBeStatic
     def reset(self):
         """
 
@@ -171,6 +174,7 @@ class GameController:
         """
         print(f"reset()")
 
+    # noinspection PyMethodMayBeStatic
     def quit(self):
         """
 
@@ -178,22 +182,7 @@ class GameController:
         """
         print(f"quit()")
 
-    def check_movement(self, key):
-        """
-
-        :param key:
-        :return:
-        """
-        print(f"check_movement({key})")
-
-    def check_rotation(self, key):
-        """
-
-        :param key:
-        :return:
-        """
-        print(f"check_rotation({key})")
-
+    # noinspection PyMethodMayBeStatic
     def save(self):
         """
 
@@ -208,6 +197,7 @@ class GameController:
         """
         self.view.show_play_screen()
 
+    # noinspection PyMethodMayBeStatic
     def ask_location(self):
         """
 
@@ -215,6 +205,7 @@ class GameController:
         """
         print(f"ask_location()")
 
+    # noinspection PyMethodMayBeStatic
     def insert_location(self, location):
         """
 
@@ -229,7 +220,6 @@ class GameController:
         :param n: an integer representing the square root of the number of tiles on each side
         :return: void
         """
-        print(f"set_cube({n})") # this one should call the cube's function
         self.cube.set_cube(n)
 
     def clear_scores(self):
@@ -246,8 +236,8 @@ class GameView(tk.Frame):
         super().__init__(master, **kw)
         self.master = master
         self.grid()
-        self.window_width = 800
-        self.window_height = 800
+        self.window_width = WINDOW_WIDTH
+        self.window_height = WINDOW_HEIGHT
         self.submenu_items = []
         self.hints_items = []
         self.canvas = tk.Canvas(self, width=self.window_width, height=self.window_height, borderwidth=0,
@@ -258,6 +248,7 @@ class GameView(tk.Frame):
         self.controller = GameController(self, cube)
         master.bind("<KeyPress>", self.controller.keypress)
         self.controller.update_ui()
+        self.cube_frame = None
 
     def show_start_screen(self):
         self.canvas.delete(tk.ALL)
@@ -274,16 +265,18 @@ class GameView(tk.Frame):
         self.create_button('Play', lambda event: self.controller.start_game(),
                            location=((WINDOW_WIDTH - BUTTON_SIZE[0]) / 2, y))
 
-    def show_high_scores(self):
+    def create_submenu(self, width, height):
         self.clear_submenu()
-        width = 300
-        height = 400
         top = (WINDOW_HEIGHT - height) / 2
         left = (WINDOW_WIDTH - width) / 2
         bottom = (WINDOW_HEIGHT + height) / 2
         right = (WINDOW_HEIGHT + width) / 2
         submenu = self.canvas.create_rectangle(left, top, right, bottom, SUBMENU_STYLE)
         self.submenu_items.append(submenu)
+        return top, left, bottom, right, width, height
+
+    def show_high_scores(self):
+        top, left, bottom, right, width, height = self.create_submenu(300, 400)
         best_moves = "Best Moves:\n18\n40\n15"
         for score in self.controller.record_keeper.get_best_moves():
             best_moves += f"\n{score}"
@@ -309,15 +302,7 @@ class GameView(tk.Frame):
             self.submenu_items.append(widget)
 
     def show_dimension_selection(self):
-        self.clear_submenu()
-        width = 250
-        height = 400
-        top = (WINDOW_HEIGHT - height) / 2
-        left = (WINDOW_WIDTH - width) / 2
-        bottom = (WINDOW_HEIGHT + height) / 2
-        right = (WINDOW_HEIGHT + width) / 2
-        submenu = self.canvas.create_rectangle(left, top, right, bottom, SUBMENU_STYLE)
-        self.submenu_items.append(submenu)
+        top, left, bottom, right, width, height = self.create_submenu(250, 400)
         x = left + BUTTON_MARGIN[0]
         y = top + 200
         for i in [2, 3, 4]:
@@ -334,10 +319,8 @@ class GameView(tk.Frame):
             self.submenu_items.append(widget)
 
     def pygame_update(self):
-        self.controller.display.display()
-        self.controller.display.redisplay()
-        pygame.display.flip()
-        self.master.after(0, self.pygame_update)
+        pygame.display.update()
+        self.master.after(1000, self.pygame_update)
 
     def show_hints_list(self):
         self.clear_hints_list()
@@ -371,17 +354,13 @@ class GameView(tk.Frame):
             self.canvas.delete(item)
 
     def show_play_screen(self):
-
         self.canvas.delete(tk.ALL)
-        self.cube_frame = tk.Frame(self.canvas, width=800, height=800)
-        self.cube_frame.pack(side=tk.RIGHT)
-        os.environ['SDL2_WINDOWID'] = str(self.cube_frame.winfo_id())
-        os.environ['SDL2_VIDEODRIVER'] = 'dummy'
+        self.cube_frame = tk.Frame(self.canvas, width=500, height=500)
+        os.environ['SDL_WINDOWID'] = str(self.cube_frame.winfo_id())
 
-        screen = pygame.display.set_mode((500, 500), DOUBLEBUF | OPENGL)
+        screen = pygame.display.set_mode((500, 500))
         screen.fill(pygame.Color(255, 255, 255))
 
-        pygame.display.init()
         self.pygame_update()
 
         self.create_button('Save', lambda event: self.show_start_screen(),

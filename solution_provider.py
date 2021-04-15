@@ -1,6 +1,5 @@
 from constants import *
 import numpy as np
-import cube
 
 
 def path(start_side, end_side):
