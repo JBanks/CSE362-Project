@@ -86,7 +86,7 @@ class Display:
         glTranslatef(0, 0, -25.0)
         glRotate(self.xrot, 1, 0, 0)
         glRotate(self.yrot, 0, 1, 0)
-        glTranslatef((x - 1) * self.cube_size + x * self.gap, (-y + 1) * self.cube_size - y * self.gap, -((z - 1) * self.cube_size + z * self.gap - self.gap))
+        glTranslatef((-x+1) * self.cube_size - x * self.gap + self.gap*2, (-y + 1) * self.cube_size - y * self.gap, -((z - 1) * self.cube_size + z * self.gap - self.gap))
         # glTranslatef(0,0,-(self.n-1+self.gap*2) * 2) #x2 because i have to bring it to the center from the previous translate and then the same size
         color = RGB.rgb.get(self.faces[2][i][j])
         glColor(color)
