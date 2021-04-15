@@ -48,6 +48,7 @@ class GameController:
         :return: void
         """
         translate = {'z': 1, 'x': 2, 'c': 3, 'a': 4, 's': 5, 'd': 6, 'q': 7, 'w': 8, 'e': 9}
+        # TODO: Keys for mac. up: 8320768, down: 8255233, right: 8189699, left: 8124162
         arrows = {37: (Axis.HORIZ, -ANGLE_CHANGE),
                   38: (Axis.VERT, ANGLE_CHANGE),
                   39: (Axis.HORIZ, ANGLE_CHANGE),
@@ -148,7 +149,10 @@ class GameController:
         :param key: the key that was pressed
         :return: The axis and theta
         """
-        rotation = {4: (0, -45), 8: (1, 45), 6: (0, 45), 2: (1, 45)}
+        rotation = {4: (Axis.HORIZ, -ANGLE_CHANGE),
+                    8: (Axis.VERT, ANGLE_CHANGE),
+                    6: (Axis.HORIZ, ANGLE_CHANGE),
+                    2: (Axis.VERT, -ANGLE_CHANGE)}
         return rotation[key]
 
     def control_state_update(self, key):
