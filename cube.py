@@ -1,9 +1,7 @@
-from display import Display
 import random
 import math
 import numpy
 from constants import *
-from display import Display
 
 
 class Cube:
@@ -14,12 +12,9 @@ class Cube:
         self.theta = math.pi / 8  # vertical rotation
         self.active_face = 0
         self.cube_size = 2
-        self.n = 2  # pocket cube TODO change the initialization of n so the user choses
-        self.gap = 0.2
+        # self.n = 2  # pocket cube TODO change the initialization of n so the user choses
+        # self.gap = 0.2
         self.observers = []  # A list for the observer pattern
-
-        # self.display = Display()
-        self.set_cube(3)  # TODO just for test
 
     def add_observer(self, observer):
         """
@@ -102,6 +97,7 @@ class Cube:
             self.phi += delta_angle
         else:
             self.theta += delta_angle
+        #todo call update move here
 
     def get_state(self):
         """
@@ -110,7 +106,7 @@ class Cube:
         :param
         :return:
         """
-        pass
+        return self.faces
 
     def undo(self):
         """
@@ -122,7 +118,7 @@ class Cube:
         """
         pass
 
-    def set_cube(self, n):
+    def set_cube(self, n = 3):
         """
         this method is going to set the cube to be displayed
         :param n = the dimension chosen.
@@ -135,8 +131,6 @@ class Cube:
                 for c in range(n):
                     self.faces[colors, r, c] = i
             i += 1
-        # self.display.update_move(self.faces)
-        # self.display.display(self.faces)
 
     def move(self, face, direction, faces=None):
         """
