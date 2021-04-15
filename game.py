@@ -236,8 +236,8 @@ class GameView(tk.Frame):
         super().__init__(master, **kw)
         self.master = master
         self.grid()
-        self.window_width = 800
-        self.window_height = 800
+        self.window_width = WINDOW_WIDTH
+        self.window_height = WINDOW_HEIGHT
         self.submenu_items = []
         self.hints_items = []
         self.canvas = tk.Canvas(self, width=self.window_width, height=self.window_height, borderwidth=0,

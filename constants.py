@@ -1,8 +1,8 @@
 from enum import IntEnum, auto
 import math
 
-WINDOW_WIDTH = 800
-WINDOW_HEIGHT = 800
+WINDOW_WIDTH = 700
+WINDOW_HEIGHT = 600
 
 BUTTON_SIZE = (100, 30)
 BUTTON_MARGIN = (10, 10)
