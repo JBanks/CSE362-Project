@@ -132,7 +132,7 @@ class Cube:
                 self.phi += delta_angle
         else:
             self.theta += delta_angle
-            debug(f"position: {sym_ceil(sym_floor(sym_sub(self.theta * 8 / math.pi, 1))/4)}")
+        self.notify(None)
 
     def get_state(self):
         """
