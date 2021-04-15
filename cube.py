@@ -138,12 +138,13 @@ class Cube:
 
     def get_state(self):
         """
-
-        :param
-        :param
-        :return:
+        :return: faces: the array containing the color on each square
+        of each face
+        :return: phi: the horizontal angle of the cube
+        :return: theta: the vertical angle of the cube
         """
-        pass
+        # return the faces array and the viewing angles
+        return self.faces, self.phi, self.theta
 
     def undo(self):
         """
