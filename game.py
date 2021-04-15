@@ -49,9 +49,9 @@ class GameController:
         """
         translate = {'z': 1, 'x': 2, 'c': 3, 'a': 4, 's': 5, 'd': 6, 'q': 7, 'w': 8, 'e': 9}
         # TODO: Keys for mac. up: 8320768, down: 8255233, right: 8189699, left: 8124162
-        arrows = {37: (Axis.HORIZ, -ANGLE_CHANGE),
+        arrows = {37: (Axis.HORIZ, ANGLE_CHANGE),
                   38: (Axis.VERT, ANGLE_CHANGE),
-                  39: (Axis.HORIZ, ANGLE_CHANGE),
+                  39: (Axis.HORIZ, -ANGLE_CHANGE),
                   40: (Axis.VERT, -ANGLE_CHANGE),
                   8124162: (Axis.HORIZ, ANGLE_CHANGE),
                   8320768: (Axis.VERT, ANGLE_CHANGE),
