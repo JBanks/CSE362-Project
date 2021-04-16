@@ -49,11 +49,11 @@ class GameController:
         """
         translate = {'z': 1, 'x': 2, 'c': 3, 'a': 4, 's': 5, 'd': 6, 'q': 7, 'w': 8, 'e': 9}
         # TODO: Keys for mac. up: 8320768, down: 8255233, right: 8189699, left: 8124162
-        arrows = {37: (Axis.HORIZ, ANGLE_CHANGE),
+        arrows = {37: (Axis.HORIZ, ANGLE_CHANGE),  # Real computer keys
                   38: (Axis.VERT, ANGLE_CHANGE),
                   39: (Axis.HORIZ, -ANGLE_CHANGE),
                   40: (Axis.VERT, -ANGLE_CHANGE),
-                  8124162: (Axis.HORIZ, ANGLE_CHANGE),
+                  8124162: (Axis.HORIZ, ANGLE_CHANGE),  # Macbook keys
                   8320768: (Axis.VERT, ANGLE_CHANGE),
                   8189699: (Axis.HORIZ, -ANGLE_CHANGE),
                   8255233: (Axis.VERT, -ANGLE_CHANGE)}
@@ -125,8 +125,8 @@ class GameController:
 
         movements = {ControlStates.CENTER: {4: (active, Direction.CCW),
                                             6: (active, Direction.CW),
-                                            2: (active, Direction.CW),
-                                            8: (active, Direction.CCW)},
+                                            2: (active, Direction.CCW),
+                                            8: (active, Direction.CW)},
                      ControlStates.TOP_LEFT: {4: (top, Direction.CW),
                                               6: (top, Direction.CCW),
                                               2: (left, Direction.CW),
