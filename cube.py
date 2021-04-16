@@ -31,9 +31,6 @@ class Cube:
         self.phi = math.pi / 8  # horizontal rotation
         self.theta = math.pi / 8  # vertical rotation
         self.active_face = 0
-        self.cube_size = 2
-        self.n = 2  # pocket cube TODO change the initialization of n so the user choses
-        self.gap = 0.2
         self.faces = None
         self.observers = []  # A list for the observer pattern
         self.copy_faces = None
